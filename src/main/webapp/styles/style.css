@@ -1,0 +1,566 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Oct 26, 2014, 3:02:41 PM
+    Author     : Kyle
+*/
+
+body{
+    font-family: 'Lora', serif;
+    background: rgb(213,322,217);
+    position:fixed;
+    width: 100%;
+}
+
+.button{
+    border: 1px solid black;
+    text-align: center;
+    cursor: pointer;
+    font-size: 20px;
+    color: black;
+    transition: all .2s;
+}
+
+.button:hover{
+    background: black;
+    color: white;
+}
+
+.smButton{
+    height: 40px;
+    width: 40px;
+}
+
+.medButton{
+    height: 20px;
+    width: 100px;
+}
+
+/****HEADER / HEADER MENU****/
+header, header nav{
+    width: 100%;
+}
+
+header{
+    position: fixed;
+    margin-top: -70px;
+    min-width: 395px;
+    border-bottom-right-radius: 50px;
+    border-bottom-left-radius: 50px;
+    background: black;
+    transition: all .3s;
+    z-index: 1;
+    -webkit-box-shadow: 30px 10px 0px 10px rgba(0,0,0,.7);
+    -moz-box-shadow: 30px 10px 0px 10px rgba(0,0,0,.7);
+    box-shadow: 30px 10px 0px 10px rgba(0,0,0,.7);
+}
+
+header nav{
+    margin-top: 5px;
+    height: 100%;
+    overflow: hidden; 
+}
+
+.headerOption{
+    width: 33.3%;
+    background: rgb(213,322,217);
+    height: 30px;
+    text-align: center;
+    font-size: 26px;
+    color: black;
+    float: left;
+    transition: all .2s;
+    cursor: pointer;
+}
+
+.headerOption:hover{ 
+    background: rgba(255,255,255,.4); 
+    color: white;
+}
+
+#expandMenuTab{
+    position: relative;
+    width: 50px;
+    height: 50px;
+    left: 50%;
+    margin-left: -25px;
+    top: 30px;
+    background: black;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    text-align: center;
+    font-size: 40px;
+    color: white;
+    cursor: pointer;
+}
+#expandMenuTab span{
+    position: relative;
+    top: 5px;
+}
+
+/****MAIN AREA****/
+#mainContent{
+    position: relative;
+    height: 550px;
+    background: rgb(153,178,183);
+    top: 65px;
+    margin-bottom: 30px;
+}
+
+.form{
+    position: relative;
+    top: 20px;
+    background: rgba(255,255,255,.9);
+    height: 90%;
+    min-width: 395px;
+    /*overflow-y: auto;*/
+}
+
+.form h2{
+    font-size: 26px;
+    padding-top: 10px;
+    margin-left: 10px;
+}
+
+/***WORK LOG***/
+#workLog{
+    position: relative;
+    margin-top: 5px;
+    width: 96%;
+    margin-left: 2%;
+    border-bottom: 2px solid black;
+    border-left: 15px solid black;
+    -moz-box-shadow:0 0 10px 5px #888888 inset;
+    -webkit-box-shadow: 0 0 10px 5px #888888 inset;
+    box-shadow: 0 0 10px 5px #888888 inset;
+}
+
+#workLog th, #workLog td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    padding: 5px;
+    text-align: left;
+}
+
+#workLog th{
+    background-color: black;
+    color: black;
+    text-shadow: 1px 0 0 black;
+    background: rgb(153,178,183);
+}
+
+#workLog th:nth-child(4){
+    text-align: center;
+}
+
+#workLog tr:nth-child(even) {
+    background-color: #eee;
+}
+
+#workLog tr:nth-child(odd) {
+    background-color:#fff;
+}
+
+#workLog #wlEntries{
+    position: relative;
+    width: 98%;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+#workLog #wlFillerRow *{
+    padding: 0;
+}
+
+#workLog tr:hover{
+    background: black;
+    cursor: pointer;
+}
+
+.wlButton{
+    background: rgb(213,322,217);
+    color: black;
+    border: 1px solid black;
+    width: 50px;
+    padding: 5px;
+    margin-left: 2%;
+    cursor: pointer;
+    float: left;
+    margin-bottom: 5px;
+    transition: all .1s; 
+}
+
+.wlButton:hover{
+    background: black;
+    color: white;
+}
+
+.wlButton:active{
+    border: 1px solid rgb(213,322,217);
+    -moz-box-shadow:0 0 2px 4px rgb(0,0,0);
+    -webkit-box-shadow: 0 0 2px 4px rgb(0,0,0);
+    box-shadow: 0 0 2px 4px rgb(0,0,0);
+}
+
+.wlSaveButton{
+    position: relative;
+    text-align: center;
+    float: right;
+    margin-right: 20px;
+    width: 200px;
+}
+
+.wloptionsBtn{
+    position: relative;
+    float: left;
+    width: 20px;
+    height: 20px;
+    margin-left: 5%;
+    border-radius: 50%;
+    border: 1px solid black;
+    background: rgb(213,322,217);
+    -moz-box-shadow:0 0 5px 5px rgb(213,322,217);
+    -webkit-box-shadow: 0 0 5px 5px rgb(213,322,217);
+    box-shadow: 0 0 5px 1px rgb(313,322,317);
+    transition: all .3s;   
+}
+
+.wloptionsBtn:hover{
+    background: black;
+    border: 1px solid rgb(213,322,217);
+}
+
+.wloptionsBtn:active{
+    -moz-box-shadow:0 0 5px 15px rgb(213,322,217);
+    -webkit-box-shadow: 0 0 15px 5px rgb(213,322,217);
+    box-shadow: 0 0 5px 15px rgb(313,322,317);
+}
+
+.wlRemoveBtn{
+    position: relative;
+    float: right;
+    width: 20px;
+    height: 20px;
+    margin-right: 5%;
+    border-radius: 50%;
+    border: 1px solid black;
+    background: rgb(255,0,0);
+    -moz-box-shadow:0 0 5px 5px rgb(213,322,217);
+    -webkit-box-shadow: 0 0 5px 5px rgb(213,322,217);
+    box-shadow: 0 0 5px 1px rgb(313,322,317);
+    transition: all .3s;   
+}
+
+.wlRemoveBtn:hover{
+    background: black;
+    border: 1px solid rgb(213,322,217);
+}
+
+.wlRemoveBtn:active{
+    -moz-box-shadow:0 0 5px 15px rgb(213,322,217);
+    -webkit-box-shadow: 0 0 15px 5px rgb(213,322,217);
+    box-shadow: 0 0 5px 15px rgb(313,322,317);
+}
+
+
+/*WL - Options*/
+#optionsMenu{
+    position: fixed;
+    top: 150px;
+    height: 70%;
+    right: 15px;
+    min-height: 300px;
+    width: 0px;
+    background: rgba(0,0,0,.8);
+    transition: all .4s;
+    border-top-left-radius: 50px;
+    border-bottom-left-radius: 50px;
+    -moz-box-shadow:0 0 10px 5px #888888 inset;
+    -webkit-box-shadow: 0 0 10px 5px #888888 inset;
+    box-shadow: 0 0 10px 5px #888888 inset;
+    overflow: hidden;
+    z-index: 1;
+}
+
+#optionsMenu ul{
+    width: 100%;
+    height: 100%;
+}
+
+#optionsMenu li{
+    width: 95%;
+    height: 10%;
+    font-size: 1.3em;
+    color: white;
+    margin-top: 5px;
+    padding-right: 5px;
+    text-align: center;
+    transition: all .3s;
+}
+
+#optionsMenu li span{
+    position: relative;
+    top: 30%;
+    cursor: pointer;
+    transition: all .2s;
+}
+
+#optionsMenu li .arrow{
+    top: 0px;
+    font-size: 38px;
+}
+
+#optionsMenu li:hover{
+    background: rgba(255,255,255,.6);
+}
+
+#optionsMenu li:hover span{
+    color: black;
+}
+
+#optionsMenu li:hover:nth-child(2){
+    background: none;
+}
+
+.selectedItem{
+    background: black;
+}
+
+.dateSelect{
+    width: 80%;
+}
+
+#optionsMenu .optionsMenuDetails{
+    position: absolute;
+    width: 0%;
+    height: 100%;
+    left: 30%;
+    background: rgba(213,322,217,.9);
+    z-index: 1;
+    padding:8px;
+    padding-right: 12px;
+    -moz-box-shadow:0 0 10px 5px rgb(153,178,183) inset;
+    -webkit-box-shadow: 0 0 10px 5px rgb(153,178,183) inset;
+    box-shadow: 0 0 10px 5px rgb(153,178,183) inset;
+    transition: all .2s;
+}
+
+/**ClientList**/
+#clientList{
+    width: 96%;
+    margin-left: 2%;
+    border-bottom: 2px solid black;
+    border-left: 15px solid black;
+    -moz-box-shadow:0 0 10px 5px #888888 inset;
+    -webkit-box-shadow: 0 0 10px 5px #888888 inset;
+    box-shadow: 0 0 10px 5px #888888 inset;
+    max-height: 250px;
+    overflow-y: auto;
+}
+
+#clientList li{
+    border: 1px solid black;
+    height: 30px;
+    cursor: pointer;
+    padding-left: 10px;
+    padding-top: 8px;
+    transition: all .05s;
+}
+
+.selectedItem{
+    background: black;
+}
+
+.selectedClient{
+    background: black;
+    color: white;
+}
+
+.evenSelected{
+    background: rgb(189,189,189);
+    color: black;
+}
+
+/*#clientList li:nth-child(even){
+    background: rgb(189,189,189);
+}*/
+
+#clientList li:hover{
+    border: 1px solid white;
+    background: black;
+    color: white;
+}
+
+.clientFormButton{
+    margin-bottom: 5px;
+    margin-top: 5px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-right: 5px;
+    margin-left: 2%;;
+    float:left;
+}
+
+#addNewClientButton{
+
+}
+
+#removeClientButton{
+
+}
+
+#selectedClient{
+    clear: left;
+    height: 30px;
+}
+
+#selectedClient input{
+    display: inline-block;
+    width:20%;
+    height: 100%;
+    text-align: center;
+}
+
+#selectedClient input:nth-child(1){
+    margin-left: 2%;
+    width:5%;
+}
+
+.jobTrackerRemoveButton, .jobTrackerUpdateButton{
+    margin-top: 10px;
+    background: red;
+}
+
+.jobTrackerUpdateButton{
+    background: rgb(153,178,183);
+}
+
+/**ADD CLIENT FORM**/
+#addClientForm table{
+    margin-top: 20px;
+    width: 90%;
+    margin-left: 5%;
+    min-width: 400px;  
+}
+
+#addClientForm table tr{
+    position: relative;
+    height: 30px;
+}
+
+#addClientForm table tr td:nth-child(1){
+    width: 25%;
+}
+
+.addClientFormInput{
+    width: 75%;
+    border-radius: 2px;
+}
+
+#addNewClientButton{
+    border: 1px solid black;
+    background: rgb(213,322,217);
+    color: black;
+    padding-left: 10px;
+    padding-right: 10px;
+    cursor: pointer;
+    transition: all .2s;
+}
+
+#addNewClientButton:hover{
+    background: black;
+    color: white;
+}
+
+.clientFormPayRateInput{
+    width: 35%;
+    border-radius: 2px;
+}
+
+.clientFormPayRateMoneyInput{
+    width: 85px;
+}
+
+.addClientFormButton{
+    margin-top: 10px;
+    margin-left: 5%;
+    padding: 5px;
+    width: 160px;
+    font-size: 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all .2s;
+}
+
+.addClientFormButton:hover{
+    color: white;
+    background: black;
+}
+
+/****LOGIN PAGE****/
+#loginWrapper{
+    height: 250px;
+    width: 80%;
+    margin-left: 10%;
+    margin-top: 30px;
+    border-radius: 2px;
+    box-shadow: 0px 0px 12px 2px #000;
+}
+
+#loginWrapper tr{
+    text-align: center;
+}
+
+#loginWrapper tr td:nth-child(even){
+    text-align: left;
+    padding-top: 25px;
+}
+
+#loginWrapper tr td:nth-child(odd){
+    padding-top: 10px;
+    width: 30%;
+}
+
+#loginWrapper tr td{
+
+}
+
+#loginWrapper #submit{
+    cursor: pointer;
+    font-size: 18px;
+    width: 80%;
+    height: 100%;
+    margin-left: 5px;
+    transition: all .2s;
+}
+
+#createNewAccount, #getAccount{
+    margin-left: 10px;
+}
+
+#createNewAccount:active, #getAccount:active{
+    color: black;
+}
+
+.loginInput{
+    width: 90%;
+    height: 80%;
+    padding-left: 10px;
+    border-radius: 2px;
+}
+
+.loginAnchor{
+    font-size: 12px;
+    color: blue;
+    cursor: pointer;
+}
+
+/****FOOTER****/
+footer{
+    position: fixed;
+    bottom: 0;
+}
+
