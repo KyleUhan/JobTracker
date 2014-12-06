@@ -3,32 +3,13 @@
 var rootURL_clientProfile = rootURL_clientProfile || "http://localhost:8080/JobTracker/api/v1/clientProfiles";
 var rootURL_userAccount = rootURL_userAccount || "http://localhost:8080/JobTracker/api/v1/userAccounts";
 
-
-var items = [];
-var itemNames = [];
 function renderList(data) {
     alert();
-    //switch to actual switch later
     switch (0) {
         default:
             renderClientList(data);
     }
 }
-
-/*function renderClientList(data) {
-    items = [];
-    itemNames = [];
-    clearInput();
-    clearClientList();
-    $.each(data, function (key, val) {
-        $('#clientList').append("<li id='client" + key + "'>" + val.clientName + "</li>");
-        items.push(val);
-        itemNames.push(val.clientName);
-    });
-    setClientListBg();
-    clickList();
-}*/
-
 
 //Work Log Menu
 var sideMenuSwitch = true;
@@ -64,7 +45,7 @@ function addWorkLogEntry() {
             "</td>" +
             "<td>" +
             "<select id='wlClientOption" + quickCounter + "' class='wlClientOption'>" +
-            buildClientDropDown(itemNames) +
+            buildClientDropDown() +
             "</select>" +
             "</td>" +
             "<td>" +
@@ -77,11 +58,11 @@ function addWorkLogEntry() {
 }
 
 //Adds Clients to DropDown list in worklog
-function buildClientDropDown(itemArray) {
+function buildClientDropDown() {
     var stringToBuild = "<option value='0'></option>";
-    for (var i = 0; i < itemArray.length; i++) {
-        stringToBuild += "<option value='" + (i + 1) + "'>" + itemArray[i] + "</option>";
-    }
+      $.each(CLIENTS.returnClientList(), function (key, val){
+          stringToBuild += "<option value='" + (key + 1) + "'>" + val.clientName + "</option>";
+      });
     return stringToBuild;
 }
 

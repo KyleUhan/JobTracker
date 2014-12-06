@@ -37,14 +37,14 @@ public class WorklogFacadeREST extends AbstractFacade<Worklog> {
 
     @POST
     @Override
-    @Consumes({"application/xml", "application/json"})
+    @Consumes({"application/json"})
     public void create(Worklog entity) {
         super.create(entity);
     }
 
     @PUT
     @Path("{id}")
-    @Consumes({"application/xml", "application/json"})
+    @Consumes({"application/json"})
     public void edit(@PathParam("id") Integer id, Worklog entity) {
         super.edit(entity);
     }
@@ -57,21 +57,21 @@ public class WorklogFacadeREST extends AbstractFacade<Worklog> {
 
     @GET
     @Path("{id}")
-    @Produces({"application/xml", "application/json"})
+    @Produces({"application/json"})
     public Worklog find(@PathParam("id") Integer id) {
         return super.find(id);
     }
 
     @GET
     @Override
-    @Produces({"application/xml", "application/json"})
+    @Produces({"application/json"})
     public List<Worklog> findAll() {
         return super.findAll();
     }
 
     @GET
     @Path("{from}/{to}")
-    @Produces({"application/xml", "application/json"})
+    @Produces({"application/json"})
     public List<Worklog> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
         return super.findRange(new int[]{from, to});
     }
@@ -88,7 +88,7 @@ public class WorklogFacadeREST extends AbstractFacade<Worklog> {
     @Produces("application/json")
     public List<Worklog> findByUserName(@PathParam("userName") String name) {
         Query q = em.createNamedQuery("Worklog.findByUserName");
-        q.setParameter("worklogUserName", name);
+        q.setParameter("userName", name);
         return q.getResultList();       
     }
 

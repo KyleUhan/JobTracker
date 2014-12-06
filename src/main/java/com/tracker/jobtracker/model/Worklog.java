@@ -7,7 +7,6 @@
 package com.tracker.jobtracker.model;
 
 import java.io.Serializable;
-import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,8 +16,6 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -36,7 +33,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Worklog.findByWorklogEnddate", query = "SELECT w FROM Worklog w WHERE w.worklogEnddate = :worklogEnddate"),
     @NamedQuery(name = "Worklog.findByWorklogClient", query = "SELECT w FROM Worklog w WHERE w.worklogClient = :worklogClient"),
     @NamedQuery(name = "Worklog.findByWorklogUsername", query = "SELECT w FROM Worklog w WHERE w.worklogUsername = :worklogUsername"),
-    @NamedQuery(name = "Worklog.findByUserName", query = "SELECT w FROM Worklog w WHERE w.worklogUsername = :worklogUserName")})
+    @NamedQuery(name = "Worklog.findByUserName", query = "SELECT w FROM Worklog w WHERE w.worklogUsername = :userName")
+})
 public class Worklog implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -44,12 +42,12 @@ public class Worklog implements Serializable {
     @Basic(optional = false)
     @Column(name = "worklog_id")
     private Integer worklogId;
+    @Size(max = 20)
     @Column(name = "worklog_startdate")
-    @Temporal(TemporalType.DATE)
-    private Date worklogStartdate;
+    private String worklogStartdate;
+    @Size(max = 20)
     @Column(name = "worklog_enddate")
-    @Temporal(TemporalType.DATE)
-    private Date worklogEnddate;
+    private String worklogEnddate;
     @Size(max = 255)
     @Column(name = "worklog_client")
     private String worklogClient;
@@ -72,19 +70,19 @@ public class Worklog implements Serializable {
         this.worklogId = worklogId;
     }
 
-    public Date getWorklogStartdate() {
+    public String getWorklogStartdate() {
         return worklogStartdate;
     }
 
-    public void setWorklogStartdate(Date worklogStartdate) {
+    public void setWorklogStartdate(String worklogStartdate) {
         this.worklogStartdate = worklogStartdate;
     }
 
-    public Date getWorklogEnddate() {
+    public String getWorklogEnddate() {
         return worklogEnddate;
     }
 
-    public void setWorklogEnddate(Date worklogEnddate) {
+    public void setWorklogEnddate(String worklogEnddate) {
         this.worklogEnddate = worklogEnddate;
     }
 

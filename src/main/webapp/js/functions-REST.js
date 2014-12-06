@@ -128,20 +128,19 @@ function success(type, url, data) {
             default:
                 alert('non recognized http type');
         }
-    } else if (tableName === "authorities") {
+    } else if (tableName === "worklogs") {
         switch (type) {
             case GET:
-                alert('get for authorities')
+                WORKLOG.renderWorkLog(data)
                 break;
             case DELETE:
-                alert('delete for authorities');
+                alert('delete for worklogs');
                 break;
             case POST:
-                alert('added for authorities');
+                alert('added for worklogs');
                 break;
             case PUT:
-                alert('put for authorities');
-                REST.method.findAll(url);
+                alert('put for worklogs');
                 break;
             default:
                 alert('non recognized http type');
@@ -254,7 +253,7 @@ function convertUserAuthoritesToJSON(val) {
     return test;
 }
 
-function convertWorkLogToJSON(val){
+function convertWorkLogToJSON(val) {
     return JSON.stringify({
         "worklogId": 0,
         "worklogStartdate": val[0],

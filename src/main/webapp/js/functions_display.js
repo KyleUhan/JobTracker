@@ -37,7 +37,8 @@ function showForm(e) {
         addLoadingImage();
         REST.method.findAll(rootURL_clientProfile + "/clients/"+localStorage.user);
     } else if (e === 0) {
-        clickMenulLogList();
+        WORKLOG.getWorkEntries(localStorage.user)
+       // clickMenulLogList();
     } else if (e === 2) {
         showSelectedLoginForm(null);
     }
