@@ -13,10 +13,8 @@ var GET = 'GET';
 var DELETE = 'DELETE';
 var POST = 'POST';
 var PUT = 'PUT';
-$(function () {
-    // REST.method.findAll(rootURL_clientProfile);
-});
 
+var LOGIN = LOGIN || {};
 var REST = REST || {};
 REST.method = {
     findAll: function (rootURL) {
@@ -92,10 +90,11 @@ REST.method = {
 //routing functions
 function success(type, url, data) {
     var tableName = getTableName(url);
+    //alert(tableName + " - " + type)
     if (tableName === "clientprofiles") {
         switch (type) {
             case GET:
-                areaToUpdate(url, data);
+                areaToUpdate(tableName, data);
                 break;
             case DELETE:
                 REST.method.findAll(url);
@@ -167,8 +166,7 @@ function error(type, textStatus) {
     }
 }
 
-function areaToUpdate(url, data) {
-    var areaToUpdate = getTableName(url);
+function areaToUpdate(areaToUpdate, data) {
     switch (areaToUpdate) {
         case 'clientprofiles':
             renderClientList(data);
@@ -243,16 +241,6 @@ function convertUserToJSON(val) {
     });
 }
 
-function convertUserAuthoritesToJSON(val) {
-    var test = {};
-    test = JSON.stringify({
-        "authority": val[0],
-        "authoritiesId": val[1],
-        "username": val[2]
-    });
-    return test;
-}
-
 function convertWorkLogToJSON(val) {
     return JSON.stringify({
         "worklogId": 0,
@@ -262,3 +250,13 @@ function convertWorkLogToJSON(val) {
         "worklogUsername": val[3]
     });
 }
+
+/*function convertUserAuthoritesToJSON(val) {
+ var test = {};
+ test = JSON.stringify({
+ "authority": val[0],
+ "authoritiesId": val[1],
+ "username": val[2]
+ });
+ return test;
+ }*/

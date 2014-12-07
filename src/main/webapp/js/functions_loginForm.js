@@ -6,9 +6,24 @@ var rootURL_users = rootURL_users || "http://localhost:8080/JobTracker/api/v1/us
 var rootURL_authorities = rootURL_authorities || "http://localhost:8080/JobTracker/api/v1/authorities";
 
 var storage = (typeof (Storage) !== "undefined") ? true : false;
+var LOGIN = LOGIN || {};
+LOGIN = {
+    login: function (name) {
+        login(name);
+    },
+    addUser: function () {
+        makeNewUser();
+    },
+    checkIfUserIsLoggedIn: function () {
+        return (localStorage.user !== "undefined") ? true : false;
+    },
+    clearInputs: function () {
+        $('.loginInput').val("");
+    }
+};
 
 function checkForLoggedInUser() {
-    if (localStorage.user !== "undefined") {
+    if (LOGIN.checkIfUserIsLoggedIn()) {
         loginUser(localStorage.user);
     }
 }
@@ -27,29 +42,49 @@ function makeNewUser() {
 }
 
 function checkForUserLogin(data) {
-    lOGINFORM.clearInputs();
-    var userFound = (data) ? true : false;
-    if (userFound) {
-        if (storage) {
-            localStorage.user = data.username;
+    var dataFound = (typeof data !== "undefined") ? true : false;
+    var len = 0;
+    if (dataFound) {
+        $.each(data, function (key, val) {
+            if (isNaN(key)) {
+                return false;
+            }
+            if (len > 0) {
+                return false;
+            }
+            len++;
+        });
+        LOGIN.clearInputs();
+        var userFound = (len < 1) ? true : false;
+        if (userFound) {
+            if (storage) {
+                localStorage.user = data.username;
+            }
+            loginUser(localStorage.user);
+        } else {
+            userNotFound();
         }
-        loginUser(localStorage.user);
     } else {
         userNotFound();
     }
 }
 
 function loginUser(user) {
+    clearInput();
+    clearClientList();
+    addLoadingImage();
+    REST.method.findAll(rootURL_clientProfile + "/clients/" + user);
+    WORKLOG.getWorkEntries(user);
     buildHeaderLoginName(user);
 }
 
 function routeLoginForm(e) {
     switch ($(e).val()) {
         case "Login":
-            login($('#loginInput').val());
+            LOGIN.login($('#loginInput').val());
             break;
         case "Create New User":
-            makeNewUser();
+            LOGIN.addUser()
             break;
         case "Send Info":
             alert('sending info');
@@ -58,11 +93,28 @@ function routeLoginForm(e) {
             alert("unknown - loginform submit click");
     }
 }
+//
+//
+//var lOGINFORM = {
+//    clearInputs: function () {
+//        $('.loginInput').val("");
+//    }
+//};
 
-
-var lOGINFORM = {
-    clearInputs: function () {
-        $('.loginInput').val("");
+function buildHeaderLoginName(user) {
+    var inx = user.indexOf('@');
+    if (inx !== -1) {
+        user = user.substring(0, inx);
     }
-};
+    if (user === "undefined") {
+        $('#headerOptionThree').text("Login");
+    } else {
+        $('#headerOptionThree').text(user);
+    }
+}
 
+function userNotFound() {
+    $('#headerOptionThree').text("Login");
+    localStorage.user = "undefined";
+    alert('User Not found');
+}

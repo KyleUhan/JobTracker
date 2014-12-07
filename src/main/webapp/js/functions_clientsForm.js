@@ -12,7 +12,7 @@ CLIENTS = {
     },
     returnClientList: function () {
         var list = localStorage.getItem("clients");
-        return JSON.parse(list)
+        return JSON.parse(list);
     }
 }
 
@@ -40,7 +40,6 @@ function getPayStyle() {
             break;
         default:
     }
-
     return rateAndType;
 }
 
@@ -59,31 +58,39 @@ function addClient() {
         $('#addClientFormPaysMileageInput').val(),
         localStorage.user
     ];
-    REST.method.addRecord(rootURL_clientProfile, clientInfo);
+    REST.method.addRecord(rootURL_clientProfile, clientInfo)
 }
 
 function removeClient() {
-    var id = $('#clientId').val();
-    if (id > -1) {
-        var remove = confirm("Are you sure you wish to delete?");
-        if (remove) {
-            REST.method.deleteRecord(rootURL_clientProfile, id);
-        } else {
-            alert("Action aborted");
+    if (LOGIN.checkIfUserIsLoggedIn()) {
+        var id = $('#clientId').val();
+        if (id > -1) {
+            var remove = confirm("Are you sure you wish to delete?");
+            if (remove) {
+                REST.method.deleteRecord(rootURL_clientProfile, id);
+            } else {
+                alert("Action aborted");
+            }
         }
+    } else {
+        alert("Please log in to use this page")
     }
 }
 
 function updateClient() {
-    var id = $('#clientId').val();
-    if (id > -1) {
-        var remove = confirm("Are you sure you wish to update?");
-        if (remove) {
-            var clientInfo = [id, $('#clientName').val()];
-            REST.method.updateRecord(rootURL_clientProfile, id, clientInfo);
-        } else {
-            alert("Action aborted");
+    if (LOGIN.checkIfUserIsLoggedIn()) {
+        var id = $('#clientId').val();
+        if (id > -1) {
+            var remove = confirm("Are you sure you wish to update?");
+            if (remove) {
+                var clientInfo = [id, $('#clientName').val()];
+                REST.method.updateRecord(rootURL_clientProfile, id, clientInfo);
+            } else {
+                alert("Action aborted");
+            }
         }
+    } else {
+        alert("Please log in to use this page")
     }
 }
 
@@ -95,8 +102,8 @@ function renderClientList(data) {
     clearClientList();
     $.each(CLIENTS.returnClientList(), function (key, val) {
         $('#clientList').append("<li id='client" + key + "'>" + val.clientName + "</li>");
-        items.push(val);
-        itemNames.push(val.clientName);
+        //   items.push(val);
+        // itemNames.push(val.clientName);
     });
     setClientListBg();
     clickList();

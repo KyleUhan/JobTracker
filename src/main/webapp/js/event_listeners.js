@@ -80,8 +80,7 @@ $(function () {
      ******************************************************/
     //-Add new Work Log Record
     $('#wlNewBtn').click(function () {
-        // clickMenulLogList();
-        addWorkLogEntry();
+        WORKLOG.addNewWorkLog();
     });
 
     //-Options button for work log record
@@ -100,7 +99,7 @@ $(function () {
     });
     
     $('#wlSaveBtn').click(function(){
-        WORKLOG.save()
+        WORKLOG.save();
     });
 
 

@@ -31,14 +31,14 @@ function headerMenuSwitch() {
 //Shows the form associated with a menu option
 function showForm(e) {
     $('.form:nth-child(' + (e + 1) + ')').show('fast');
-    if (e === 1) {
+    if (e === 0) {
+        WORKLOG.getWorkEntries(localStorage.user);
+        // clickMenulLogList();
+    } else if (e === 1) {
         clearInput();
         clearClientList();
         addLoadingImage();
-        REST.method.findAll(rootURL_clientProfile + "/clients/"+localStorage.user);
-    } else if (e === 0) {
-        WORKLOG.getWorkEntries(localStorage.user)
-       // clickMenulLogList();
+        REST.method.findAll(rootURL_clientProfile + "/clients/" + localStorage.user);
     } else if (e === 2) {
         showSelectedLoginForm(null);
     }
@@ -75,9 +75,13 @@ function addLoadingImage() {
 }
 
 function showAddNewClientForm() {
-    hideAllForms();
-    $('.addClientFormInput').val("");
-    $('#addClientForm').show('fast');
+    if (LOGIN.checkIfUserIsLoggedIn()) {
+        hideAllForms();
+        $('.addClientFormInput').val("");
+        $('#addClientForm').show('fast');
+    } else {
+        alert('please log in to add client');
+    }
 }
 
 //Adds the fields from client profile list to the selected input boxes
@@ -165,26 +169,31 @@ function clearOtherRateValues() {
  **********************LOGIN PAGE***********************
  ******************************************************/
 
-hideCreateNewUser();
+//hideCreateNewUser();
 
 
 function showSelectedLoginForm(sender) {
-    var senderName = $(sender).attr('id');
-    switch (senderName) {
-        case "createNewAccount":
-            if (createUserSwitch) {
-                showCreateNewUser(sender);
-                createUserSwitch = false;
-            } else {
-                showMainLogin(sender);
-                createUserSwitch = true;
-            }
-            break;
-        case "getAccount":
-            showOnlyLoginInput();
-            break;
-        default:
-            showLoginAndPasswordInput();
+    if (sender === null) {
+        showMainLogin($('#createNewAccount'));
+
+    } else {
+        var senderName = $(sender).attr('id');
+        switch (senderName) {
+            case "createNewAccount":
+                if (createUserSwitch) {
+                    showCreateNewUser(sender);
+                    createUserSwitch = false;
+                } else {
+                    showMainLogin(sender);
+                    createUserSwitch = true;
+                }
+                break;
+            case "getAccount":
+                showOnlyLoginInput();
+                break;
+            default:
+                showLoginAndPasswordInput();
+        }
     }
 }
 function showOnlyLoginInput() {
@@ -210,27 +219,6 @@ function showCreateNewUser(e) {
     $('#passwordWrapper').show();
     $('#confirmPasswordWrapper').show();
     $('#submit').val("Create New User").css('width', '170px');
-}
-
-function buildHeaderLoginName(user) {
-    var inx = user.indexOf('@');
-    if (inx !== -1) {
-        user = user.substring(0, inx);
-    }
-    if (user === "undefined") {
-        $('#headerOptionThree').text("Login");
-    } else {
-        $('#headerOptionThree').text(user);
-    }
-}
-
-function userNotFound() {
-    $('#headerOptionThree').text("Login");
-    alert('User Not found');
-}
-
-function clearFields() {
-
 }
 /******************************************************
  **********************MAIN AREA/GENERAL****************
