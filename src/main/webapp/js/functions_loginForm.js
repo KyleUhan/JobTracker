@@ -6,6 +6,8 @@ var rootURL_users = rootURL_users || "http://localhost:8080/JobTracker/api/v1/us
 var rootURL_authorities = rootURL_authorities || "http://localhost:8080/JobTracker/api/v1/authorities";
 
 var storage = (typeof (Storage) !== "undefined") ? true : false;
+
+var createUserSwitch = true;
 var LOGIN = LOGIN || {};
 LOGIN = {
     login: function (name) {
@@ -117,4 +119,53 @@ function userNotFound() {
     $('#headerOptionThree').text("Login");
     localStorage.user = "undefined";
     alert('User Not found');
+}
+
+function showSelectedLoginForm(sender) {
+    if (sender === null) {
+        showMainLogin($('#createNewAccount'));
+    } else {
+        var senderName = $(sender).attr('id');
+        switch (senderName) {
+            case "createNewAccount":
+                if (createUserSwitch) {
+                    showCreateNewUser(sender);
+                    createUserSwitch = false;
+                } else {
+                    showMainLogin(sender);
+                    createUserSwitch = true;
+                }
+                break;
+            case "getAccount":
+                showOnlyLoginInput();
+                break;
+            default:
+                showLoginAndPasswordInput();
+        }
+    }
+}
+
+function showOnlyLoginInput() {
+    $('.loginInputWrapper').hide();
+    $('#submit').val("Send Info").css('width', '70%');
+}
+
+function showMainLogin(e) {
+    $(e).text('Create New User');
+    showLoginAndPasswordInput();
+    $('#submit').val("Login").css('width', '80%');
+}
+
+function showLoginAndPasswordInput() {
+    $('#loginInputWrapper').show();
+    $('#passwordWrapper').show();
+    $('#confirmPasswordWrapper').hide();
+}
+
+function showCreateNewUser(e) {
+    $(e).text('Back to login');
+    $('#loginInputWrapper').show();
+    $('#passwordWrapper').show();
+    $('#confirmPasswordWrapper').show();
+    $('#submit').val("Create New User").css('width', '170px');
 }

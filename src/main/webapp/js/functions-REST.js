@@ -97,7 +97,7 @@ function success(type, url, data) {
                 areaToUpdate(tableName, data);
                 break;
             case DELETE:
-                REST.method.findAll(url);
+                CLIENTS.findAllClients(localStorage.user);
                 break;
             case POST:
                 hideAllForms();
@@ -130,7 +130,7 @@ function success(type, url, data) {
     } else if (tableName === "worklogs") {
         switch (type) {
             case GET:
-                WORKLOG.renderWorkLog(data)
+                WORKLOG.renderWorkLog(data);
                 break;
             case DELETE:
                 alert('delete for worklogs');
@@ -169,7 +169,7 @@ function error(type, textStatus) {
 function areaToUpdate(areaToUpdate, data) {
     switch (areaToUpdate) {
         case 'clientprofiles':
-            renderClientList(data);
+            CLIENTS.buildClientList(data)
             break;
         case 'users':
             alert('area to update - userAccount');

@@ -7,6 +7,8 @@
 var rootURL_clientProfile = rootURL_clientProfile || "http://localhost:8080/JobTracker/api/v1/clientProfiles";
 var rootURL_userAccount = rootURL_userAccount || "http://localhost:8080/JobTracker/api/v1/userAccounts";
 
+var ERROR_MSG_LOGIN = "Please login to use this feature.";
+
 
 $(function () {
     hideAllForms();
@@ -69,10 +71,6 @@ $(function () {
         hidePayRateInputs();
         showPayRateSelected(this);
     });
-    
-    function addClientFormRateToAdd(){
-        
-    }
 
 
     /******************************************************
@@ -94,12 +92,13 @@ $(function () {
     //- Remove worklog item
     $('#workLog').on('click', '.wlRemoveBtn', function () {
         if (confirm('Are you sure you want to delete this record?')) {
-            $(this).parent().parent().empty();
+            WORKLOG.removeWorkLog($(this).attr('id'));
+          //  $(this).parent().parent().empty();
         }
     });
     
     $('#wlSaveBtn').click(function(){
-        WORKLOG.save();
+        WORKLOG.saveWorkLog();
     });
 
 
