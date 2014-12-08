@@ -1,14 +1,10 @@
 /******************************************************
  **********************LOGIN PAGE***********************
  ******************************************************/
-var rootURL_clientProfile = rootURL_clientProfile || "http://localhost:8080/JobTracker/api/v1/clientProfiles";
-var rootURL_users = rootURL_users || "http://localhost:8080/JobTracker/api/v1/users";
-var rootURL_authorities = rootURL_authorities || "http://localhost:8080/JobTracker/api/v1/authorities";
 
-var storage = (typeof (Storage) !== "undefined") ? true : false;
 
 var createUserSwitch = true;
-var LOGIN = LOGIN || {};
+
 LOGIN = {
     login: function (name) {
         login(name);

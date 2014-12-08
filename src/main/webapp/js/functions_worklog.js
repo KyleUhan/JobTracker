@@ -1,8 +1,7 @@
-var rootURL_workLog = rootURL_workLog || "http://localhost:8080/JobTracker/api/v1/worklogs";
+
 var displayCounter = 0;
 var workLogAdded = false;
 
-var WORKLOG = WORKLOG || {};
 WORKLOG = {
     addNewWorkLog: function () {
         addWorkLogEntry();

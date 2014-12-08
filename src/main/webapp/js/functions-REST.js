@@ -5,17 +5,7 @@
  */
 
 
-var versionNumber = 'v1';
-var rootURL_clientProfile = rootURL_clientProfile || "http://localhost:8080/JobTracker/api/v1/clientProfiles";
-var rootURL_users = rootURL_users || "http://localhost:8080/JobTracker/api/v1/users";
-var rootURL_authorities = rootURL_authorities || "http://localhost:8080/JobTracker/api/v1/authorities";
-var GET = 'GET';
-var DELETE = 'DELETE';
-var POST = 'POST';
-var PUT = 'PUT';
 
-var LOGIN = LOGIN || {};
-var REST = REST || {};
 REST.method = {
     findAll: function (rootURL) {
         $.ajax({

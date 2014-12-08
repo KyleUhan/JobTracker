@@ -1,21 +1,11 @@
 /* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * EVENT LISTENERS
  */
-
-var rootURL_clientProfile = rootURL_clientProfile || "http://localhost:8080/JobTracker/api/v1/clientProfiles";
-var rootURL_userAccount = rootURL_userAccount || "http://localhost:8080/JobTracker/api/v1/userAccounts";
-
-var ERROR_MSG_LOGIN = "Please login to use this feature.";
-
-
 $(function () {
     hideAllForms();
     hidePayRateInputs();
     hidePayTravelInput();
     hidePayMileageInput();
-
     checkForLoggedInUser();
     /******************************************************
      **********************HEADER MENU**********************
@@ -27,7 +17,6 @@ $(function () {
     $('.headerOption').click(function () {
         headerMenuSelection($(this).index());
     });
-
 
     /******************************************************
      **********************MY CLIENTS PAGE******************
@@ -72,7 +61,6 @@ $(function () {
         showPayRateSelected(this);
     });
 
-
     /******************************************************
      **********************WORK LOG PAGE********************
      ******************************************************/
@@ -101,7 +89,6 @@ $(function () {
         WORKLOG.saveWorkLog();
     });
 
-
     /******************************************************
      **********************LOGIN PAGE***********************
      ******************************************************/
@@ -116,5 +103,4 @@ $(function () {
     $('#getAccount').click(function () {
         showSelectedLoginForm(this);
     });
-
 });

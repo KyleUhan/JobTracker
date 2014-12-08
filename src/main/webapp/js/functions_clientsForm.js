@@ -1,10 +1,9 @@
 /******************************************************
  **********************MY CLIENTS PAGE******************
  ******************************************************/
-var rootURL_clientProfile = rootURL_clientProfile || "http://localhost:8080/JobTracker/api/v1/clientProfiles";
-var rootURL_userAccount = rootURL_userAccount || "http://localhost:8080/JobTracker/api/v1/userAccounts";
 
-var CLIENTS = CLIENTS || {};
+
+
 
 CLIENTS = {
     saveClientList: function (data) {
