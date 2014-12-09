@@ -1,10 +1,6 @@
 /* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+* Handles REST and routing funcitons/ajax calls
  */
-
-
 
 REST.method = {
     findAll: function (rootURL) {
@@ -24,6 +20,7 @@ REST.method = {
         $.ajax({
             type: DELETE,
             url: rootURL + '/' + id,
+            dataType: "json",
             success: function () {
                 success(DELETE, rootURL, "");
             },
@@ -38,7 +35,7 @@ REST.method = {
             contentType: 'application/json',
             url: rootURL,
             dataType: "json",
-            data: convertToJSON(rootURL, val),
+            data: JOBTRACKER.display.dao.convertToJSON(rootURL, val),
             success: function (data, textStatus, jqXHR) {
                 success(POST, rootURL, data);
             },
@@ -52,8 +49,8 @@ REST.method = {
             type: PUT,
             contentType: 'application/json',
             url: rootURL + '/' + id,
-            dataType: "html",
-            data: convertToJSON(rootURL, val),
+            dataType: "json",
+            data: JOBTRACKER.display.dao.convertToJSON(rootURL, val),
             success: function (data, textStatus, jqXHR) {
                 success(PUT, rootURL, data);
             },
@@ -80,7 +77,6 @@ REST.method = {
 //routing functions
 function success(type, url, data) {
     var tableName = getTableName(url);
-    //alert(tableName + " - " + type)
     if (tableName === "clientprofiles") {
         switch (type) {
             case GET:
@@ -94,7 +90,9 @@ function success(type, url, data) {
                 showForm(1);
                 break;
             case PUT:
-                REST.method.findAll(url);
+                hideAllForms();
+                showForm(1);
+                CLIENTS.findAllClients(localStorage.user);
                 break;
             default:
                 alert('non recognized http type');
@@ -111,7 +109,7 @@ function success(type, url, data) {
                 alert('added');
                 break;
             case PUT:
-                REST.method.findAll(url);
+               // REST.method.findAll(url);
                 break;
             case "FIND":
             default:
@@ -123,10 +121,11 @@ function success(type, url, data) {
                 WORKLOG.renderWorkLog(data);
                 break;
             case DELETE:
-                alert('delete for worklogs');
+                WORKLOG.getWorkEntries(localStorage.user);
+                alert('Work log deleted');
                 break;
             case POST:
-                alert('added for worklogs');
+                alert('Work log has been added');
                 break;
             case PUT:
                 alert('put for worklogs');
@@ -159,7 +158,7 @@ function error(type, textStatus) {
 function areaToUpdate(areaToUpdate, data) {
     switch (areaToUpdate) {
         case 'clientprofiles':
-            CLIENTS.buildClientList(data)
+            CLIENTS.buildClientList(data);
             break;
         case 'users':
             alert('area to update - userAccount');
@@ -181,72 +180,3 @@ function getTableName(url) {
     return tblName.toLowerCase();
 }
 
-//ROUTING FOR JSON CONVERSION
-function convertToJSON(url, val) {
-    var tableToUpdate = getTableName(url);
-    var jsonInfo = {};
-    switch (tableToUpdate) {
-        case 'clientprofiles':
-            jsonInfo = convertClientToJSON(val);
-            break;
-        case 'users':
-            jsonInfo = convertUserToJSON(val);
-            break;
-        case 'authorities':
-            jsonInfo = convertUserAuthoritesToJSON(val);
-            break;
-        case 'worklogs':
-            jsonInfo = convertWorkLogToJSON(val);
-            break;
-        default:
-            alert('unknown table to update');
-    }
-    return jsonInfo;
-}
-function convertClientToJSON(val) {
-    return JSON.stringify({
-        "idClientProfile": val[0],
-        "clientName": val[1],
-        "clientContactName": val[2],
-        "clientContactNumber": val[3],
-        "clientContactEmail": val[4],
-        "clientRate": val[5],
-        "clientPerDay": val[6],
-        "clientPerHour": val[7],
-        "clientSetRate": val[8],
-        "clientTravelRate": val[9],
-        "clientMileageRate": val[10],
-        "clientTimestamp": new Date(),
-        "clientUserId": val[11]
-    });
-}
-
-function convertUserToJSON(val) {
-    return JSON.stringify({
-        "username": val[0],
-        "password": val[1],
-        "enabled": val[2],
-        "userTimestamp": new Date(),
-        "authoritiesCollection": ""
-    });
-}
-
-function convertWorkLogToJSON(val) {
-    return JSON.stringify({
-        "worklogId": 0,
-        "worklogStartdate": val[0],
-        "worklogEnddate": val[1],
-        "worklogClient": val[2],
-        "worklogUsername": val[3]
-    });
-}
-
-/*function convertUserAuthoritesToJSON(val) {
- var test = {};
- test = JSON.stringify({
- "authority": val[0],
- "authoritiesId": val[1],
- "username": val[2]
- });
- return test;
- }*/

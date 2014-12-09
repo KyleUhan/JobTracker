@@ -2,9 +2,6 @@
  **********************MY CLIENTS PAGE******************
  ******************************************************/
 
-
-
-
 CLIENTS = {
     saveClientList: function (data) {
         localStorage.setItem('clients', JSON.stringify(data));
@@ -19,14 +16,25 @@ CLIENTS = {
     addClient: function () {
         addClient();
     },
+    updateClient: function(){
+        updateClient();
+    },
+    removeClient: function(){
+       removeClient(); 
+    },
     selectClient: function () {
 
     },
     buildClientList:function(data){
-        renderClientList(data)
+        renderClientList(data);
     }
 };
 
+
+/* Returns a 4 spot array - the 1st spot is the $$ and then 1 of the three 
+ * remaining positions is ticked with a 1, the rest with 0's...see below for 
+ * corresponding spot ids
+ */
 function getPayStyle() {
     var payStyle;
     var rate;
@@ -94,7 +102,23 @@ function updateClient() {
         if (id > -1) {
             var remove = confirm("Are you sure you wish to update?");
             if (remove) {
-                var clientInfo = [id, $('#clientName').val()];
+                var clientInfo = [];
+                $.each(CLIENTS.returnClientList(), function(key,val){
+                    if(parseInt(id) === parseInt(val.idClientProfile)){
+                        clientInfo[0] = id;
+                        clientInfo[1] = $('#clientName').val();
+                        clientInfo[2] = val.clientContactName;
+                        clientInfo[3] = val.clientContactNumber;
+                        clientInfo[4] = val.clientContactEmail;
+                        clientInfo[5] = val.clientRate;
+                        clientInfo[6] = val.clientPerDay;
+                        clientInfo[7] = val.clientPerHour;
+                        clientInfo[8] = val.clientSetRate;
+                        clientInfo[9] = val.clientTravelRate;
+                        clientInfo[10] = val.clientMileageRate;
+                        clientInfo[11] = localStorage.user;
+                    }
+                });
                 REST.method.updateRecord(rootURL_clientProfile, id, clientInfo);
             } else {
                 alert("Action aborted");
@@ -106,18 +130,12 @@ function updateClient() {
 }
 
 function renderClientList(data) {
-    CLIENTS.saveClientList(data)
-   // items = [];
-   // itemNames = [];
+    CLIENTS.saveClientList(data);
     clearInput();
     clearClientList();
-    var t = CLIENTS.returnClientList();
-    $.each(t, function (key, val) {
+    $.each(CLIENTS.returnClientList(), function (key, val) {
         $('#clientList').append("<li id='client" + key + "'>" + val.clientName + "</li>");
-        //   items.push(val);
-        // itemNames.push(val.clientName);
     });
-    //setClientListBg();
     clickList();
 }
 

@@ -15,10 +15,12 @@ var rootURL_workLog = rootURL_workLog || "http://localhost:8080/JobTracker/api/v
 var rootURL_users = rootURL_users || "http://localhost:8080/JobTracker/api/v1/users";
 
 //OBJECTS
+var JOBTRACKER = JOBTRACKER || {};
 var WORKLOG = WORKLOG || {};
 var CLIENTS = CLIENTS || {};
 var LOGIN = LOGIN || {};
 var REST = REST || {};
+
 
 //CONSTANTS
 var ERROR_MSG_LOGIN = "Please login to use this feature.";

@@ -1,10 +1,7 @@
 /******************************************************
  **********************LOGIN PAGE***********************
  ******************************************************/
-
-
 var createUserSwitch = true;
-
 LOGIN = {
     login: function (name) {
         login(name);
@@ -71,7 +68,7 @@ function loginUser(user) {
     clearInput();
     clearClientList();
     addLoadingImage();
-    REST.method.findAll(rootURL_clientProfile + "/clients/" + user);
+    CLIENTS.findAllClients(user)
     WORKLOG.getWorkEntries(user);
     buildHeaderLoginName(user);
 }

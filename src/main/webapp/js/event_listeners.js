@@ -2,6 +2,7 @@
  * EVENT LISTENERS
  */
 $(function () {
+    /*Move these to a load js file*/
     hideAllForms();
     hidePayRateInputs();
     hidePayTravelInput();
@@ -26,16 +27,16 @@ $(function () {
     });
 
     $('#updateClientButton').click(function () {
-        updateClient();
+        CLIENTS.updateClient();
     });
 
     $('#removeClientButton').click(function () {
-        removeClient();
+        CLIENTS.removeClient();
     });
 
     //ADD CLIENT FORM EVENTS
     $('#addClientFormSubmit').click(function () {
-        addClient();
+        CLIENTS.addClient();
     });
 
     $('#addClientFormPaysTravel').change(function () {
