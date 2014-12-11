@@ -93,6 +93,13 @@ public class UsersFacadeREST extends AbstractFacade<Users> {
     public String countREST() {
         return String.valueOf(super.count());
     }
+    
+    @GET
+    @Path("user/{pw}/{name}")
+    @Produces({"application/json"})
+    public String convertPassword(@PathParam("pw") String pw, @PathParam("name") String user){
+        return ShaHashGeneratorApp.sha512(pw, user);
+    }
 
     @Override
     protected EntityManager getEntityManager() {

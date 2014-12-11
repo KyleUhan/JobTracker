@@ -2,6 +2,8 @@
  * EVENT LISTENERS
  */
 $(function () {
+    //TESTING
+    //showWLOptionsMenu(1)
     /*Move these to a load js file*/
     hideAllForms();
     hidePayRateInputs();
@@ -71,11 +73,9 @@ $(function () {
     });
 
     //-Options button for work log record
-    var positionPicked = 0;
     $('#workLog').on('click', '.wloptionsBtn', function () {
         var pos = $(this).attr('id');
-        positionPicked = pos.charAt(pos.length - 1);
-        showWLOptionsMenu(positionPicked);
+        showWLOptionsMenu(pos.charAt(pos.length - 1));
     });
 
     //- Remove worklog item

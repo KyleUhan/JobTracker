@@ -285,12 +285,12 @@ header nav{
     z-index: 1;
 }
 
-#optionsMenu ul{
+#optionsMenu #menuForWorkLogOptions{
     width: 100%;
     height: 100%;
 }
 
-#optionsMenu li{
+#optionsMenu #menuForWorkLogOptions li{
     width: 95%;
     height: 10%;
     font-size: 1.3em;
@@ -301,27 +301,27 @@ header nav{
     transition: all .3s;
 }
 
-#optionsMenu li span{
+#optionsMenu #menuForWorkLogOptions li span{
     position: relative;
     top: 30%;
     cursor: pointer;
     transition: all .2s;
 }
 
-#optionsMenu li .arrow{
+#optionsMenu #menuForWorkLogOptions li .arrow{
     top: 0px;
     font-size: 38px;
 }
 
-#optionsMenu li:hover{
+#optionsMenu #menuForWorkLogOptions li:hover{
     background: rgba(255,255,255,.6);
 }
 
-#optionsMenu li:hover span{
+#optionsMenu #menuForWorkLogOptions li:hover span{
     color: black;
 }
 
-#optionsMenu li:hover:nth-child(2){
+#optionsMenu #menuForWorkLogOptions li:hover:nth-child(2){
     background: none;
 }
 
@@ -346,6 +346,50 @@ header nav{
     -webkit-box-shadow: 0 0 10px 5px rgb(153,178,183) inset;
     box-shadow: 0 0 10px 5px rgb(153,178,183) inset;
     transition: all .2s;
+}
+
+#optionMenuInnerDetails li{
+    height: 30px;
+    padding-top: 5px;
+}
+
+#optionMenuInnerDetails #WLDetailsClientName, #WLDetailsStartDate, #WLDetailsEndDate, #WLDetailsTimeWorkedAmount, #WLDetailsPayRateAmount, #WLDetailsTotalAmount{
+    font-weight: bold;
+}
+
+#optionMenuInnerDetails #WLDetailsPayRate{
+    border-bottom: 2px solid black;
+}
+
+#hoursInput{
+    width: 50px;
+}
+
+#saveHoursButton{
+    height: 15px;
+    width: 40px;
+    margin-left: 5px;
+    padding-right: 3px;
+    padding-left: 3px;
+    cursor: pointer;
+    background: rgb(213,322,217);
+    color: black;
+    border: 1px solid black;
+    text-align: center;
+    font-size: 14px;
+    transition: all .1s;
+}
+
+#saveHoursButton:active{
+    border: 1px solid rgb(213,322,217);
+    -moz-box-shadow:0 0 2px 4px rgb(0,0,0);
+    -webkit-box-shadow: 0 0 2px 4px rgb(0,0,0);
+    box-shadow: 0 0 2px 4px rgb(0,0,0);
+}
+
+#saveHoursButton:hover{
+    color: white;
+    background: black;
 }
 
 /**ClientList**/
@@ -424,9 +468,20 @@ header nav{
     text-align: center;
 }
 
+/*Id*/
 #selectedClient input:nth-child(1){
     margin-left: 2%;
     width:5%;
+}
+
+/*Pay Rate*/
+#selectedClient input:nth-child(3){
+    width:12%;
+}
+
+/*Pay type*/
+#selectedClient input:nth-child(4){
+    width:18%;
 }
 
 .jobTrackerRemoveButton, .jobTrackerUpdateButton{

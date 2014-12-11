@@ -18,8 +18,20 @@ WORKLOG = {
     renderWorkLog: function (data) {
         populateWorkLog(data);
     },
-    clearWorkLog:function(){
+    clearWorkLog: function () {
         $('#workLog #wlEntries tr').empty();
+    },
+    calculateDaysWorked: function (dateA, dateB) {
+        return dateDiffInDays(dateA, dateB);
+    },
+    calculateTotal: function (num1, num2) {
+        return num1 * num2;
+    }
+};
+
+WORKLOG.display = {
+    formatCurrency: function (num) {
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 };
 
@@ -50,7 +62,6 @@ function populateWorkLog(data) {
         displayCounter = key + 1;
     });
 }
-
 
 function addWorkLogEntry() {
     if (LOGIN.checkIfUserIsLoggedIn()) {
@@ -103,19 +114,17 @@ function saveWorkLog() {
         var $endDate = $('#wlEndDate' + (displayCounter - 1)).val();
         var $client = $('#wlClientOption' + (displayCounter - 1) + " option:selected").text();
         if ($startDate === "" || $endDate === "" || $client === "") {
-            alert('please enter all information for work log')
+            alert('please enter all information for work log');
         }
         else {
             if (workLogAdded) {
                 workLogAdded = false;
                 var wl = [$startDate, $endDate, $client, localStorage.user];
-                //      alert('sd: ' + $startDate + " -- ed: " + $endDate + " client : " + $client);
                 REST.method.addRecord(rootURL_workLog, wl);
             } else {
-                alert('no changes have been made')
+                alert('no changes have been made');
             }
         }
-
     } else {
         alert(ERROR_MSG_LOGIN);
     }
@@ -141,3 +150,145 @@ function clickMenulLogList() {
     });
 }
 
+//Work Log Menu
+var sideMenuSwitch = true;
+var clientSelected;
+
+function showWLOptionsMenu(pos) {
+    clientSelected = pos;
+    hideOptionDetails();
+    resetMenuOptions();
+    if (sideMenuSwitch) {
+        $('#optionsMenu').css('width', '150px');
+        sideMenuSwitch = false;
+    } else {
+        $('#optionsMenu').css('width', '0px');
+        sideMenuSwitch = true;
+    }
+}
+
+//closes options menu
+$('#optionsMenu li:nth-child(1)').click(function () {
+    $('#optionsMenu').css('width', '0px');
+    sideMenuSwitch = true;
+});
+
+//Expands Work Log Options to show more details
+var sideMenuExpandDetails = true;
+$('#optionsMenu li:nth-child(9)').click(function () {
+    if (sideMenuExpandDetails) {
+        $('#optionsMenu li').css('text-align', 'left');
+        $('#optionsMenu li').css('padding-left', '20px');
+        $('#optionsMenu').css('width', '400px');
+        var workLogDetails = [];
+        workLogDetails[0] = $('#wlClientOption' + clientSelected + ' option:selected').text();
+        workLogDetails[1] = $('#wlStartDate' + clientSelected).val();
+        workLogDetails[2] = $('#wlEndDate' + clientSelected).val();
+        var payRate = findPayRate(workLogDetails[0]);
+        var type = findPayType(workLogDetails[0]);
+        switch (type) {
+            case "day":
+                workLogDetails[3] = WORKLOG.calculateDaysWorked(workLogDetails[2], workLogDetails[1]);
+                 $('#daysDisplay').text('Days: ');
+                 $('#hoursInput').hide();
+                 $('#saveHoursButton').hide();
+                break;
+            case "hour":
+                workLogDetails[3] = "";
+                 $('#daysDisplay').text('Hours: ');
+                 $('#hoursInput').show();
+                 $('#saveHoursButton').show();
+                 $('#hoursInput').keyup(function(){
+                     $("#optionMenuInnerDetails #WLDetailsTotalAmount").text($(this).val()*payRate);
+                 });
+                break;
+            case "flat":
+                workLogDetails[3] = WORKLOG.calculateDaysWorked(workLogDetails[2], workLogDetails[1]);
+                 $('#daysDisplay').text('Days: ');
+                 $('#hoursInput').hide();
+                 $('##saveHoursButton').hide();
+                break;
+        }
+       
+        
+        workLogDetails[4] = WORKLOG.display.formatCurrency(payRate);
+        workLogDetails[5] = WORKLOG.display.formatCurrency(WORKLOG.calculateTotal(workLogDetails[3], payRate));
+        buildOptionsDetail(workLogDetails);
+        showOptionDetails();
+        sideMenuExpandDetails = false;
+
+    } else {
+        hideOptionDetails();
+        resetMenuOptions();
+        sideMenuExpandDetails = true;
+    }
+    sideMenuSwitch = true;
+});
+
+function findPayRate(clientName) {
+    var payrate = 0;
+    $.each(CLIENTS.returnClientList(), function (key, val) {
+        if (clientName === val.clientName) {
+            payrate = val.clientRate;
+        }
+    });
+    return payrate;
+}
+
+function findPayType(clientName) {
+    var payType = "";
+    $.each(CLIENTS.returnClientList(), function (key, val) {
+        if (clientName === val.clientName) {
+            if (val.clientPerDay) {
+                payType = "day";      
+            }
+            if (val.clientPerHour) {
+                payType = "hour";
+            }
+            if (val.clientSetRate) {
+                payType = "flat";
+            }
+        }
+    });
+    return payType;
+}
+
+//dateA and dateB are javascript Date objects
+function dateDiffInDays(dateA, dateB) {
+    var d1 = new Date(dateA);
+    var d2 = new Date(dateB);
+    var diff = d2 - d1;
+    return (Math.abs(diff) / (24 * 60 * 60 * 1000))
+}
+
+function buildOptionsDetail(itemArray) {
+    $("#optionMenuInnerDetails #WLDetailsClientName").text(itemArray[0]);
+    $("#optionMenuInnerDetails #WLDetailsStartDate").text(itemArray[1]);
+    $("#optionMenuInnerDetails #WLDetailsEndDate").text(itemArray[2]);
+    $("#optionMenuInnerDetails #WLDetailsTimeWorkedAmount").text(itemArray[3]);
+    $("#optionMenuInnerDetails #WLDetailsPayRateAmount").text(itemArray[4]);
+    $("#optionMenuInnerDetails #WLDetailsTotalAmount").text(itemArray[5]);
+
+}
+
+function resetMenuOptions() {
+    $('#optionsMenu').css('width', '150px');
+    $('#optionsMenu li').css('text-align', 'center');
+    $('#optionsMenu li').css('padding-left', '0px');
+}
+
+function showOptionDetails() {
+    $('.optionsMenuDetails').css('left', '30%').css('width', '70%');
+}
+function hideOptionDetails() {
+    $('.optionsMenuDetails').css('left', '100%').css('width', '0%');
+}
+
+function hidePayRateInputs() {
+    $('.clientFormPayRateInput').hide();
+}
+
+function hidePayTravelInput() {
+    $('#paysTravelInputWrap span').hide();
+    $('#addClientFormPaysTravelInput').hide();
+}

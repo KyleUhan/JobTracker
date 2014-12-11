@@ -49,16 +49,36 @@ function checkForUserLogin(data) {
             }
             len++;
         });
-        LOGIN.clearInputs();
+
         var userFound = (len < 1) ? true : false;
         if (userFound) {
             if (storage) {
-                localStorage.user = data.username;
+                var localpw = $('#PasswordInput').val();
+                var serverPass = data.password;
+                var userName  = data.username;
+                $.ajax({
+                    type: GET,
+                    url: rootURL_users + "/user/" + localpw + "/" + userName,
+                    dataType: "html",
+                    success: function (data) {
+                        if(data === serverPass){
+                            localStorage.user = userName;
+                            loginUser(localStorage.user);
+                        }else{
+                            alert('password is not correct');
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert('server error - please enter login and password');
+                    }
+                });
+                localStorage.user = userName;
             }
-            loginUser(localStorage.user);
+            
         } else {
             userNotFound();
         }
+        LOGIN.clearInputs();
     } else {
         userNotFound();
     }
@@ -68,7 +88,7 @@ function loginUser(user) {
     clearInput();
     clearClientList();
     addLoadingImage();
-    CLIENTS.findAllClients(user)
+    CLIENTS.findAllClients(user);
     WORKLOG.getWorkEntries(user);
     buildHeaderLoginName(user);
 }
@@ -79,7 +99,7 @@ function routeLoginForm(e) {
             LOGIN.login($('#loginInput').val());
             break;
         case "Create New User":
-            LOGIN.addUser()
+            LOGIN.addUser();
             break;
         case "Send Info":
             alert('sending info');

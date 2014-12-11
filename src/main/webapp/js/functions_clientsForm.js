@@ -144,7 +144,8 @@ function populateSelected(val) {
     addToSelectedAnimation();
     $('#selectedClient input:nth-child(' + 1 + ')').val(val[0]);
     $('#selectedClient input:nth-child(' + 2 + ')').val(val[1]);
-    $('#selectedClient input:nth-child(' + 3 + ')').val("in prog");
+    $('#selectedClient input:nth-child(' + 3 + ')').val(val[2]);
+    $('#selectedClient input:nth-child(' + 4 + ')').val(val[3]);
 }
 
 //Resets the background color of the clients list
@@ -174,6 +175,16 @@ function clickList() {
                 var clientSelectedInfo = [];
                 clientSelectedInfo[0] = val.idClientProfile;
                 clientSelectedInfo[1] = val.clientName;
+                clientSelectedInfo[2] = val.clientRate;
+                if(val.clientPerDay){
+                     clientSelectedInfo[3] = "Per Day";
+                }
+                if(val.clientPerHour){
+                     clientSelectedInfo[3] = "Per Hour";
+                }
+                if(val.clientSetRate){
+                     clientSelectedInfo[3] = "Flat Rate";
+                }
                 populateSelected(clientSelectedInfo);
                 return false;
             }

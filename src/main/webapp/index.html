@@ -34,10 +34,18 @@ Author: Kyle Uhan
                 <h2>Work Log</h2>
                 <div id='wlNewBtn' class='wlButton'>+ New</div>
                 <div id='wlSaveBtn' class='wlButton wlSaveButton'>Save</div>
-
                 <nav id='optionsMenu'>
-                    <div id='optionsMenuDetails' class='optionsMenuDetails'>This is where details about a date will go.</div>
-                    <ul>
+                    <div id='optionsMenuDetails' class='optionsMenuDetails'>
+                        <ul id='optionMenuInnerDetails'>
+                            <li>Client: <span id='WLDetailsClientName'></span></li>
+                            <li>Start Date: <span id='WLDetailsStartDate'></span></li>
+                            <li>End Date: <span id='WLDetailsEndDate'></span></li>
+                            <li id='WLDetailsTimeWorked'><span id='daysDisplay'>Days:</span><input id='hoursInput' type='number'/><span id='saveHoursButton'>Save</span> <span id='WLDetailsTimeWorkedAmount'></span></li>
+                            <li id='WLDetailsPayRate'><span id='rateDisplay'>Rate:</span> $<span id='WLDetailsPayRateAmount'></span></li>
+                            <li id='WLDetailsTotal'>Total: $<span id='WLDetailsTotalAmount'></span></li>
+                        </ul>
+                    </div>
+                    <ul id='menuForWorkLogOptions'>
                         <li><span>Done</span></li> 
                         <li></li> 
                         <li><span><input type="checkBox" id='checkBox1'/><label for='checkBox1'>opt 1</label></span></li> 
@@ -77,6 +85,7 @@ Author: Kyle Uhan
                         <input type="text" name='clientId' id='clientId' class="clientSelectedWrap" value="" readonly/>
                         <input type="text" name='clientName' id='clientName' class="clientSelectedWrap" value=""/>
                         <input type="text" name='clientPay' id='clientPay' class="clientSelectedWrap" value=""/>
+                        <input type="text" name='clientPayType' id='clientPayType' class="clientSelectedWrap" value=""/>
                     </div>
                     <div id='updateClientButton' class="button medButton clientFormButton jobTrackerUpdateButton" title="remove">
                         Update
@@ -171,7 +180,6 @@ Author: Kyle Uhan
         <script src="js/jobTrackerDAO.js" type="text/javascript"></script>
         <script src="js/functions-REST.js" type="text/javascript"></script>
         <script src="js/functions_display.js" type="text/javascript"></script>
-        <script src="js/functions.js" type="text/javascript"></script>
         <script src="js/functions_clientsForm.js" type="text/javascript"></script>
         <script src="js/functions_loginForm.js" type="text/javascript"></script>
         <script src="js/functions_worklog.js" type="text/javascript"></script>
