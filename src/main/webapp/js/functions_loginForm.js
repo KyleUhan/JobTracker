@@ -1,8 +1,9 @@
 /******************************************************
- **********************LOGIN PAGE***********************
- ******************************************************/
-var $loginInput = $('.loginInput');
-var $loginWrapper = $('#loginWrapper');
+ **********************LOGIN PAGE**********************
+ ******************************************************
+ *******************Handles Login form*****************/
+
+
 
 var createUserSwitch = true;
 LOGIN = {
@@ -12,16 +13,25 @@ LOGIN = {
     addUser: function () {
         makeNewUser();
     },
+    isLoggedIn: function () {
+        checkForLoggedInUser();
+    },
     checkIfUserIsLoggedIn: function () {
         return (localStorage.user !== "undefined") ? true : false;
     },
     clearInputs: function () {
         $loginInput.val("");
     },
+    selectLogin: function (e) {
+        showSelectedLoginForm(e);
+    },
     validate: function (sender) {
         if (validateLogin()) {
             routeLoginForm(sender);
         }
+    },
+    isValidUser: function (data) {
+        checkForUserLogin(data);
     }
 };
 
@@ -33,14 +43,14 @@ function checkForLoggedInUser() {
 
 function login(name) {
     REST.method.findRecord(rootURL_users, name);
-    showMainLogin($('#createNewAccount'));
+    showMainLogin($createNewAccount);
 }
 
 function makeNewUser() {
-    var newUser = [$('#loginInput').val(), $('#PasswordConfirmInput').val(), 1];
+    var newUser = [$loginInput_id.val(), $PasswordConfirmInput.val(), 1];
     REST.method.addRecord(rootURL_users, newUser);
     setTimeout(function () {
-        login($('#loginInput').val());
+        login($loginInput_id.val());
     }, 500);
 }
 
@@ -60,7 +70,7 @@ function checkForUserLogin(data) {
         var userFound = (len < 1) ? true : false;
         if (userFound) {
             if (storage) {
-                var localpw = $('#PasswordInput').val();
+                var localpw = $PasswordInput.val();
                 var serverPass = data.password;
                 var userName = data.username;
                 $.ajax({
@@ -91,9 +101,9 @@ function checkForUserLogin(data) {
 }
 
 function loginUser(user) {
-    clearInput();
-    clearClientList();
-    addLoadingImage();
+    CLIENTS.clearSelectedClient();
+    CLIENTS.newClientForm.clearClientList();
+    CLIENTS.loadingImage();
     CLIENTS.findAllClients(user);
     WORKLOG.getWorkEntries(user);
     buildHeaderLoginName(user);
@@ -102,7 +112,7 @@ function loginUser(user) {
 function routeLoginForm(e) {
     switch ($(e).val()) {
         case "Login":
-            LOGIN.login($('#loginInput').val());
+            LOGIN.login($loginInput_id.val());
             break;
         case "Create New User":
             LOGIN.addUser();
@@ -114,35 +124,28 @@ function routeLoginForm(e) {
             alert("unknown - loginform submit click");
     }
 }
-//
-//
-//var lOGINFORM = {
-//    clearInputs: function () {
-//        $('.loginInput').val("");
-//    }
-//};
 
 function buildHeaderLoginName(user) {
-    var inx = user.indexOf('@');
-    if (inx !== -1) {
-        user = user.substring(0, inx);
-    }
     if (user === "undefined") {
-        $('#headerOptionThree').text("Login");
+        var inx = user.indexOf('@');
+        if (inx !== -1) {
+            user = user.substring(0, inx);
+        }
+        $headerOptionThree.text("Login");
     } else {
-        $('#headerOptionThree').text(user);
+        $headerOptionThree.text(user);
     }
 }
 
 function userNotFound() {
-    $('#headerOptionThree').text("Login");
+    $headerOptionThree.text("Login");
     localStorage.user = "undefined";
     alert('User Not found');
 }
 
 function showSelectedLoginForm(sender) {
     if (sender === null) {
-        showMainLogin($('#createNewAccount'));
+        showMainLogin($createNewAccount);
     } else {
         var senderName = $(sender).attr('id');
         switch (senderName) {
@@ -165,28 +168,28 @@ function showSelectedLoginForm(sender) {
 }
 
 function showOnlyLoginInput() {
-    $('.loginInputWrapper').hide();
-    $('#submit').val("Send Info").css('width', '70%');
+    $loginInputWrapper.hide();
+    $submit.val("Send Info").css('width', '70%');
 }
 
 function showMainLogin(e) {
     $(e).text('Create New User');
     showLoginAndPasswordInput();
-    $('#submit').val("Login").css('width', '80%');
+    $submit.val("Login").css('width', '80%');
 }
 
 function showLoginAndPasswordInput() {
-    $('#loginInputWrapper').show();
-    $('#passwordWrapper').show();
-    $('#confirmPasswordWrapper').hide();
+    $loginInputWrapper_id.show();
+    $passwordWrapper.show();
+    $confirmPasswordWrapper.hide();
 }
 
 function showCreateNewUser(e) {
     $(e).text('Back to login');
-    $('#loginInputWrapper').show();
-    $('#passwordWrapper').show();
-    $('#confirmPasswordWrapper').show();
-    $('#submit').val("Create New User").css('width', '170px');
+    $loginInputWrapper_id.show();
+    $passwordWrapper.show();
+    $confirmPasswordWrapper.show();
+    $submit.val("Create New User").css('width', '170px');
 }
 
 function validateLogin() {

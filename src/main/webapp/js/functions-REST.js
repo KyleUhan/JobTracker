@@ -35,7 +35,7 @@ REST.method = {
             contentType: 'application/json',
             url: rootURL,
             dataType: "json",
-            data: JOBTRACKER.display.dao.convertToJSON(rootURL, val),
+            data: JOBTRACKER.dao.convertToJSON(rootURL, val),
             success: function (data, textStatus, jqXHR) {
                 success(POST, rootURL, data);
             },
@@ -50,7 +50,7 @@ REST.method = {
             contentType: 'application/json',
             url: rootURL + '/' + id,
             dataType: "json",
-            data: JOBTRACKER.display.dao.convertToJSON(rootURL, val),
+            data: JOBTRACKER.dao.convertToJSON(rootURL, val),
             success: function (data, textStatus, jqXHR) {
                 success(PUT, rootURL, data);
             },
@@ -86,12 +86,12 @@ function success(type, url, data) {
                 CLIENTS.findAllClients(localStorage.user);
                 break;
             case POST:
-                hideAllForms();
-                showForm(1);
+                HEADER.hideAll();
+                HEADER.show(1);
                 break;
             case PUT:
-                hideAllForms();
-                showForm(1);
+                HEADER.hideAll();
+                HEADER.show(1);
                 CLIENTS.findAllClients(localStorage.user);
                 break;
             default:
@@ -100,7 +100,7 @@ function success(type, url, data) {
     } else if (tableName === "users") {
         switch (type) {
             case GET:
-                checkForUserLogin(data);
+                LOGIN.isValidUser(data);
                 break;
             case DELETE:
                 alert('delete account function');

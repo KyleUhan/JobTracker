@@ -1,14 +1,12 @@
 /******************************************************
  **********************MY CLIENTS PAGE******************
  ******************************************************/
-
 CLIENTS = {
     saveClientList: function (data) {
         localStorage.setItem('clients', JSON.stringify(data));
     },
     returnClientList: function () {
-        var list = localStorage.getItem("clients");
-        return JSON.parse(list);
+        return JSON.parse(localStorage.getItem("clients"));
     },
     findAllClients: function (user) {
         REST.method.findAll(rootURL_clientProfile + "/clients/" + user);
@@ -16,48 +14,78 @@ CLIENTS = {
     addClient: function () {
         addClient();
     },
-    updateClient: function(){
+    updateClient: function () {
         updateClient();
     },
-    removeClient: function(){
-       removeClient(); 
+    removeClient: function () {
+        removeClient();
     },
     selectClient: function () {
 
     },
-    buildClientList:function(data){
+    clearSelectedClient: function () {
+        clearInput();
+    },
+    buildClientList: function (data) {
         renderClientList(data);
     },
-    validate: function(){
-        
+    loadingImage: function () {
+        addLoadingImage();
+    },
+    validate: function () {
+
     }
 };
 
+CLIENTS.newClientForm = {
+    show: function () {
+        showAddNewClientForm();
+    },
+    clearRateValues: function () {
+        clearOtherRateValues();
+    },
+    hideRateInputs: function () {
+        hidePayRateInputs();
+    },
+    showPayRate: function (e) {
+        showPayRateSelected(e);
+    },
+    hideMileage: function () {
+        hidePayMileageInput();
+    },
+    hideTravel: function () {
+        hidePayTravelInput();
+    },
+    clearClientList: function () {
+        clearClientList();
+    }
+};
 
 /* Returns a 4 spot array - the 1st spot is the $$ and then 1 of the three 
- * remaining positions is ticked with a 1, the rest with 0's...see below for 
+ * remaining positions is ticked with a 1, the rest with 0's, to define what 
+ * type of pay style it is...see below for 
  * corresponding spot ids
  */
 function getPayStyle() {
     var payStyle;
     var rate;
     var rateAndType = [0, 0, 0, 0];
-    $('.clientFormPayRateInput').each(function (i) {
+    $clientFormPayRateInput.each(function () {
         if ($(this).val() !== "") {
             payStyle = $(this).attr('id');
         }
     });
     switch (payStyle) {
         case "addClientFormPerDayInput":
-            rate = $('#addClientFormPerDayInput').val();
+            rate = $addClientFormPerDayInput.val();
             rateAndType = [rate, 1, 0, 0];
             break;
         case "addClientFormPerHourInput":
-            rate = $('#addClientFormPerHourInput').val();
+            rate = $addClientFormPerHourInput.val();
             rateAndType = [rate, 0, 1, 0];
             break;
         case "addClientFormSetAmountInput":
-            rate = $('#addClientFormSetAmountInput').val();
+            rate = $addClientFormSetAmountInput.val();
             rateAndType = [rate, 0, 0, 1];
             break;
         default:
@@ -68,16 +96,16 @@ function getPayStyle() {
 function addClient() {
     var rateAndType = getPayStyle();
     var clientInfo = [0,
-        $('#addClientFormNAME').val(),
-        $('#addClientFormContactName').val(),
-        $('#addClientFormContactNumber').val(),
-        $('#addClientFormContactEmail').val(),
+        $addClientFormNAME.val(),
+        $addClientFormContactName.val(),
+        $addClientFormContactNumber.val(),
+        $addClientFormContactEmail.val(),
         rateAndType[0],
         rateAndType[1],
         rateAndType[2],
         rateAndType[3],
-        $('#addClientFormPaysTravelInput').val(),
-        $('#addClientFormPaysMileageInput').val(),
+        $addClientFormPaysTravelInput.val(),
+        $addClientFormPaysMileageInput.val(),
         localStorage.user
     ];
     REST.method.addRecord(rootURL_clientProfile, clientInfo);
@@ -85,7 +113,7 @@ function addClient() {
 
 function removeClient() {
     if (LOGIN.checkIfUserIsLoggedIn()) {
-        var id = $('#clientId').val();
+        var id = $clientId.val();
         if (id > -1) {
             var remove = confirm("Are you sure you wish to delete?");
             if (remove) {
@@ -101,15 +129,15 @@ function removeClient() {
 
 function updateClient() {
     if (LOGIN.checkIfUserIsLoggedIn()) {
-        var id = $('#clientId').val();
+        var id = $clientId.val();
         if (id > -1) {
             var remove = confirm("Are you sure you wish to update?");
             if (remove) {
                 var clientInfo = [];
-                $.each(CLIENTS.returnClientList(), function(key,val){
-                    if(parseInt(id) === parseInt(val.idClientProfile)){
+                $.each(CLIENTS.returnClientList(), function (key, val) {
+                    if (parseInt(id) === parseInt(val.idClientProfile)) {
                         clientInfo[0] = id;
-                        clientInfo[1] = $('#clientName').val();
+                        clientInfo[1] = $clientName.val();
                         clientInfo[2] = val.clientContactName;
                         clientInfo[3] = val.clientContactNumber;
                         clientInfo[4] = val.clientContactEmail;
@@ -134,10 +162,10 @@ function updateClient() {
 
 function renderClientList(data) {
     CLIENTS.saveClientList(data);
-    clearInput();
-    clearClientList();
+    CLIENTS.clearSelectedClient();
+    CLIENTS.newClientForm.clearClientList();
     $.each(CLIENTS.returnClientList(), function (key, val) {
-        $('#clientList').append("<li id='client" + key + "'>" + val.clientName + "</li>");
+        $clientList.append("<li id='client" + key + "'>" + val.clientName + "</li>");
     });
     clickList();
 }
@@ -149,15 +177,6 @@ function populateSelected(val) {
     $('#selectedClient input:nth-child(' + 2 + ')').val(val[1]);
     $('#selectedClient input:nth-child(' + 3 + ')').val(val[2]);
     $('#selectedClient input:nth-child(' + 4 + ')').val(val[3]);
-}
-
-//Resets the background color of the clients list
-function setClientListBg() {
-    /*alert('umm')
-     for (var i = 1; i < items.length; i += 2) {
-     alert(i)
-     $('#client' + i).addClass('evenSelected');
-     }*/
 }
 
 //Select an item from client list
@@ -179,14 +198,14 @@ function clickList() {
                 clientSelectedInfo[0] = val.idClientProfile;
                 clientSelectedInfo[1] = val.clientName;
                 clientSelectedInfo[2] = val.clientRate;
-                if(val.clientPerDay){
-                     clientSelectedInfo[3] = "Per Day";
+                if (val.clientPerDay) {
+                    clientSelectedInfo[3] = "Per Day";
                 }
-                if(val.clientPerHour){
-                     clientSelectedInfo[3] = "Per Hour";
+                if (val.clientPerHour) {
+                    clientSelectedInfo[3] = "Per Hour";
                 }
-                if(val.clientSetRate){
-                     clientSelectedInfo[3] = "Flat Rate";
+                if (val.clientSetRate) {
+                    clientSelectedInfo[3] = "Flat Rate";
                 }
                 populateSelected(clientSelectedInfo);
                 return false;
@@ -202,20 +221,21 @@ function addLoadingImage() {
 
 function showAddNewClientForm() {
     if (LOGIN.checkIfUserIsLoggedIn()) {
-        hideAllForms();
-        $('.addClientFormInput').val("");
-        $('#addClientForm').show('fast');
+        HEADER.hideAll();
+        $addClientFormInput.val("");
+        $addClientForm.show('fast');
     } else {
         alert(ERROR_MSG_LOGIN);
     }
 }
 
 //adds a little bounce when client is added to selected client area
+
 function addToSelectedAnimation() {
-    $('#selectedClient input').animate({
+    $selectedClient_input.animate({
         height: '20px'
     }, 200, function () {
-        $('#selectedClient input').animate({
+        $selectedClient_input.animate({
             height: '30px'
         }, 150);
     });
@@ -223,5 +243,33 @@ function addToSelectedAnimation() {
 
 //Removes the selected client values from the boxes
 function clearInput() {
-    $('#selectedClient input').val('');
+    $selectedClient_input.val('');
+}
+
+function clearOtherRateValues() {
+    $clientFormPayRateInput.val("");
+}
+
+function hidePayRateInputs() {
+    $clientFormPayRateInput.hide();
+}
+
+function showPayRateSelected(e) {
+    $(e).parent().parent().children().children().show('fast');
+}
+
+
+
+function hidePayMileageInput() {
+    $mileageInputWrap_span.hide();
+    $addClientFormPaysMileageInput.hide();
+}
+
+function hidePayTravelInput() {
+    $paysTravelInputWrap_span.hide();
+    $addClientFormPaysTravelInput.hide();
+}
+
+function clearClientList() {
+    $clientList.empty();
 }

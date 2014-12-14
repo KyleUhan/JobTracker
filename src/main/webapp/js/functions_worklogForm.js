@@ -1,4 +1,7 @@
-
+/************************************************************
+ **********************WORKLOG PAGE***************************
+ *************************************************************
+ *****Handles Work Log form including side option menu********/
 var displayCounter = 0;
 var workLogAdded = false;
 
@@ -31,10 +34,22 @@ WORKLOG = {
         return num1 * num2;
     },
     validateWorkLogSave: function () {
-        validateWorkLogSave()
+        validateWorkLogSave();
     },
-    validate: function(){
-        
+    validate: function () {
+
+    }
+};
+
+WORKLOG.options = {
+    show: function (pos) {
+        showWLOptionsMenu(pos);
+    },
+    hideDetails: function () {
+        hideOptionDetails;
+    },
+    showExtraOptions: function () {
+        showWorkLogExtraOptions();
     }
 };
 
@@ -65,6 +80,8 @@ function populateWorkLog(data) {
                 "<div id='wlRemoveButton" + key + "' class='wlRemoveBtn' title='remove'></div>" +
                 "<input type='hidden' id='workLogid" + key + "' value='" + val.worklogId + "'/>" +
                 "<input type='hidden' id='workLogHours" + key + "' value='" + val.worklogHours + "'/>" +
+                "<input type='hidden' id='workLogTravel" + key + "' value='" + val.worklogTravel + "'/>" +
+                "<input type='hidden' id='workLogMileage" + key + "' value='" + val.worklogMileage + "'/>" +
                 "</td>" +
                 "</tr>"
                 );
@@ -135,7 +152,15 @@ function saveWorkLog() {
         else {
             if (workLogAdded) {
                 workLogAdded = false;
-                var wl = [$startDate, $endDate, $client, localStorage.user, $hours];
+                var options = [0, 0, 0, 0];
+                $worklogOptionCheckBox.each(function (i) {
+                    if ($(this).is(":checked")) {
+                        options[i] = 1;
+                    } else {
+                        options[i] = 0;
+                    }
+                });
+                var wl = [$startDate, $endDate, $client, localStorage.user, $hours, options[0], options[1]];
                 REST.method.addRecord(rootURL_workLog, wl);
             } else {
                 alert('no changes have been made');
@@ -151,9 +176,9 @@ function removeWorklog(id) {
         id = id.substring(id.length - 1, id.length);
     }
     id = $('#workLogid' + id).val();
-    if(!workLogAdded){
+    if (!workLogAdded) {
         REST.method.deleteRecord(rootURL_workLog, id);
-    }else{
+    } else {
         workLogAdded = false;
         WORKLOG.clearWorkLog();
     }
@@ -165,8 +190,8 @@ function populateSelectedWorkLog(e) {
 }
 
 function clickMenulLogList() {
-    $('#workLog tr').click(function () {
-        $('#workLog tr').children().removeClass('selectedItem');
+    $workLog_tr.click(function () {
+        $workLog_tr.children().removeClass('selectedItem');
         $(this).children().addClass('selectedItem');
     });
 }
@@ -179,29 +204,70 @@ function showWLOptionsMenu(pos) {
     clientSelected = pos;
     hideOptionDetails();
     resetMenuOptions();
+    $worklogOptionCheckBox.prop('checked', false);
+    $worklogOptionCheckBox.each(function () {
+        if ($('#workLogTravel' + clientSelected).val() === 'true') {
+            $checkBox1.prop('checked', true);
+        }
+        if ($('#workLogMileage' + clientSelected).val() === 'true') {
+            $checkBox2.prop('checked', true);
+        }
+    });
     if (sideMenuSwitch) {
-        $('#optionsMenu').css('width', '150px');
+        $optionsMenu.css('width', '150px');
         sideMenuSwitch = false;
     } else {
-        $('#optionsMenu').css('width', '0px');
+        $optionsMenu.css('width', '0px');
         sideMenuSwitch = true;
     }
 }
 
 //closes options menu
 $('#optionsMenu li:nth-child(1)').click(function () {
-    $('#optionsMenu').css('width', '0px');
+    $worklogOptionCheckBox.each(function () {
+        $(this).prop('checked', false);
+    });
+    $optionsMenu.css('width', '0px');
     sideMenuSwitch = true;
 });
 
+function showWorkLogExtraOptions() {
+    $workLogExtraOptions.hide();
+    $worklogOptionCheckBox.each(function () {
+        if (isChecked(this)) {
+            var id = $(this).attr('id');
+            switch (id) {
+                case "checkBox1":
+                    $WLDetailsTravel.show('fast');
+                    break;
+                case "checkBox2":
+                    $WLDetailsMileage.show('fast');
+                    break;
+                case "checkBox3":
+                    break;
+                case "checkBox4":
+                    break;
+            }
+        }
+    });
+
+}
+
+function isChecked(e) {
+    return $(e).is(':checked');
+}
 //Expands Work Log Options to show more details
 var sideMenuExpandDetails = true;
 $('#optionsMenu li:nth-child(9)').click(function () {
+    $workLogExtraOptions.hide();
     if (sideMenuExpandDetails) {
-        $('#optionsMenu li').css('text-align', 'left');
-        $('#optionsMenu li').css('padding-left', '20px');
-        $('#optionsMenu').css('width', '400px');
-        var timeWorked = 0;;
+        $optionsMenu_li.css('text-align', 'left');
+        $optionsMenu.css('width', '400px');
+        WORKLOG.options.showExtraOptions();
+        $worklogOptionCheckBox.change(function () {
+            WORKLOG.options.showExtraOptions();
+        });
+        var timeWorked = 0;
         var workLogDetails = [];
         workLogDetails[0] = $('#wlClientOption' + clientSelected + ' option:selected').text();
         workLogDetails[1] = $('#wlStartDate' + clientSelected).val();
@@ -212,21 +278,21 @@ $('#optionsMenu li:nth-child(9)').click(function () {
             case "day":
                 workLogDetails[3] = WORKLOG.calculateDaysWorked(workLogDetails[2], workLogDetails[1]);
                 timeWorked = workLogDetails[3];
-                $('#daysDisplay').text('Days: ');
-                $('#hoursInput').hide();
+                $daysDisplay.text('Days: ');
+                $hoursInput.hide();
                 $("#optionMenuInnerDetails #WLDetailsTimeWorkedAmount").show();
                 break;
             case "hour":
-                $('#daysDisplay').text('Hours: ');
-                $('#hoursInput').show();
+                $daysDisplay.text('Hours: ');
+                $hoursInput.show();
                 var $hrs = $('#workLogHours' + clientSelected).val();
-                $('#hoursInput').val($hrs);
+                $hoursInput.val($hrs);
                 $("#optionMenuInnerDetails #WLDetailsTotalAmount").text();
-                $('#hoursInput').keyup(function () {
+                $hoursInput.keyup(function () {
                     $("#optionMenuInnerDetails #WLDetailsTotalAmount").text($(this).val() * payRate);
                 });
                 $("#optionMenuInnerDetails #WLDetailsTimeWorkedAmount").hide();
-                if(isNaN($hrs) || $hrs === null){
+                if (isNaN($hrs) || $hrs === null) {
                     $hrs = 0;
                 }
                 workLogDetails[3] = $hrs;
@@ -235,18 +301,16 @@ $('#optionsMenu li:nth-child(9)').click(function () {
             case "flat":
                 workLogDetails[3] = WORKLOG.calculateDaysWorked(workLogDetails[2], workLogDetails[1]);
                 timeWorked = 1;
-                $('#daysDisplay').text('Days: ');
-                $('#hoursInput').hide();
+                $daysDisplay.text('Days: ');
+                $hoursInput.hide();
                 $("#optionMenuInnerDetails #WLDetailsTimeWorkedAmount").show();
                 break;
         }
-        
         workLogDetails[4] = WORKLOG.display.formatCurrency(payRate);
         workLogDetails[5] = WORKLOG.display.formatCurrency(WORKLOG.calculateTotal(timeWorked, payRate));
         buildOptionsDetail(workLogDetails);
         showOptionDetails();
         sideMenuExpandDetails = false;
-
     } else {
         hideOptionDetails();
         resetMenuOptions();
@@ -283,7 +347,6 @@ function findPayType(clientName) {
     return payType;
 }
 
-//dateA and dateB are javascript Date objects
 function dateDiffInDays(dateA, dateB) {
     var d1 = new Date(dateA);
     var d2 = new Date(dateB);
@@ -292,35 +355,26 @@ function dateDiffInDays(dateA, dateB) {
 }
 
 function buildOptionsDetail(itemArray) {
-    $("#optionMenuInnerDetails #WLDetailsClientName").text(itemArray[0]);
-    $("#optionMenuInnerDetails #WLDetailsStartDate").text(itemArray[1]);
-    $("#optionMenuInnerDetails #WLDetailsEndDate").text(itemArray[2]);
-    $("#optionMenuInnerDetails #WLDetailsTimeWorkedAmount").text(itemArray[3]);
-    $("#optionMenuInnerDetails #WLDetailsPayRateAmount").text(itemArray[4]);
-    $("#optionMenuInnerDetails #WLDetailsTotalAmount").text(itemArray[5]);
+    $WLDetailsClientName.text(itemArray[0]);
+    $WLDetailsStartDate.text(itemArray[1]);
+    $WLDetailsEndDate.text(itemArray[2]);
+    $WLDetailsTimeWorkedAmount.text(itemArray[3]);
+    $WLDetailsPayRateAmount.text(itemArray[4]);
+    $WLDetailsTotalAmount.text(itemArray[5]);
 
 }
 
 function resetMenuOptions() {
-    $('#optionsMenu').css('width', '150px');
-    $('#optionsMenu li').css('text-align', 'center');
-    $('#optionsMenu li').css('padding-left', '0px');
+    $optionsMenu.css('width', '150px');
+    $optionsMenu_li.css('text-align', 'center');
+    $optionsMenu_li.css('padding-left', '0px');
 }
 
 function showOptionDetails() {
-    $('.optionsMenuDetails').css('left', '30%').css('width', '70%');
+    $optionsMenuDetails.css('left', '30%').css('width', '70%');
 }
 function hideOptionDetails() {
-    $('.optionsMenuDetails').css('left', '100%').css('width', '0%');
-}
-
-function hidePayRateInputs() {
-    $('.clientFormPayRateInput').hide();
-}
-
-function hidePayTravelInput() {
-    $('#paysTravelInputWrap span').hide();
-    $('#addClientFormPaysTravelInput').hide();
+    $optionsMenuDetails.css('left', '100%').css('width', '0%');
 }
 
 function clearWorkLog() {

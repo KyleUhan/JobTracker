@@ -40,7 +40,7 @@ CREATE TABLE `authorities` (
 
 LOCK TABLES `authorities` WRITE;
 /*!40000 ALTER TABLE `authorities` DISABLE KEYS */;
-INSERT INTO `authorities` VALUES ('Admin','ROLE_ADMIN',1),('kyleuhan@gmail.com','ROLE_USER',2);
+INSERT INTO `authorities` VALUES ('Admin','ROLE_ADMIN',1),('Kyle','ROLE_ADMIN',2);
 /*!40000 ALTER TABLE `authorities` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -100,7 +100,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES ('Admin','701e9043669678a93a67d90b069baa950980d02698e6b7663f245cc6927713c98c2fb317e8dbb6aa44916265dfbde3a7b090b5c57764d0dd2eaede67c60d1b70',1,'2014-12-10 20:13:05'),('kyleuhan@gmail.com','1fc98657028c4b6fc8552a3ad71e8226966ad90e1df522d93682e9d689c60429789b87d3047ce593fe578d93474c05e68b365ae293f084b75c8c0172aa3166c2',1,'2014-12-10 20:13:24');
+INSERT INTO `users` VALUES ('Admin','63ec243649e8bbb14bf8f06a76b4b51c1b042c199baf64f150f4767bbe3adfb02a61b55a6c2439979fcf05bce9a4543fc6dddcb3310b193b9c5ad772b71e1b8a',1,'2014-12-14 13:52:59'),('Kyle','6b2cf249fcbb06c2270a98a50d3b1e0853d68bbe932c41356062e9fe74261a7a9f9283f18da3bc0467c43d0b3d01cacfa5a2312e5db2e7b7850781980599179e',1,'2014-12-14 13:53:15');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -117,6 +117,9 @@ CREATE TABLE `worklog` (
   `worklog_enddate` varchar(20) DEFAULT NULL,
   `worklog_client` varchar(255) DEFAULT NULL,
   `worklog_username` varchar(255) DEFAULT NULL,
+  `worklog_hours` varchar(20) DEFAULT NULL,
+  `worklog_travel` tinyint(1) DEFAULT NULL,
+  `worklog_mileage` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`worklog_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -139,4 +142,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-12-10 20:15:53
+-- Dump completed on 2014-12-14 13:55:01

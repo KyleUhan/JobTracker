@@ -2,106 +2,88 @@
  * EVENT LISTENERS
  */
 $(function () {
-    //TESTING
-    //showWLOptionsMenu(1)
-    /*Move these to a load js file*/
-    hideAllForms();
-    hidePayRateInputs();
-    hidePayTravelInput();
-    hidePayMileageInput();
-    checkForLoggedInUser();
+    
+            
     /******************************************************
      **********************HEADER MENU**********************
      ******************************************************/
-    $('#expandMenuTab').click(function () {
-        headerMenuSwitch();
+    $expandMenuTab.click(function () {
+        HEADER.animateHeader();
     });
 
-    $('.headerOption').click(function () {
-        headerMenuSelection($(this).index());
+    $headerOption.click(function () {
+        HEADER.headerSelection($(this).index());
     });
-
     /******************************************************
      **********************MY CLIENTS PAGE******************
      ******************************************************/
-    $('#addNewClientButton').click(function () {
-        showAddNewClientForm();
+    $addNewClientButton.click(function () {
+        CLIENTS.newClientForm.show();
     });
 
-    $('#updateClientButton').click(function () {
+    $updateClientButton.click(function () {
         CLIENTS.updateClient();
     });
 
-    $('#removeClientButton').click(function () {
+    $removeClientButton.click(function () {
         CLIENTS.removeClient();
     });
 
     //ADD CLIENT FORM EVENTS
-    $('#addClientFormSubmit').click(function () {
+    $addClientFormSubmit.click(function () {
         CLIENTS.addClient();
     });
 
-    $('#addClientFormPaysTravel').change(function () {
-        if ($(this).is(':checked')) {
-            showPayRateSelected(this);
-        } else {
-            hidePayTravelInput();
-        }
+    $addClientFormPaysTravel.change(function () {
+        ($(this).is(':checked')) ? CLIENTS.newClientForm.showPayRate(this) : CLIENTS.newClientForm.hideTravel();
     });
 
-    $('#addClientFormPaysMileage').change(function () {
-        if ($(this).is(':checked')) {
-            showPayRateSelected(this);
-        } else {
-            hidePayMileageInput();
-        }
+    $addClientFormPaysMileage.change(function () {
+        ($(this).is(':checked')) ? CLIENTS.newClientForm.showPayRate(this) : CLIENTS.newClientForm.hideMileage();
     });
 
     //ADD CLIENT FORM RADIO BUTTON PAY RATE
-    $('.clientFormPayRate').change(function () {
-        clearOtherRateValues();
-        hidePayRateInputs();
-        showPayRateSelected(this);
+    $clientFormPayRate.change(function () {
+        CLIENTS.newClientForm.clearRateValues();
+        CLIENTS.newClientForm.hideRateInputs();
+        CLIENTS.newClientForm.showPayRate(this);
     });
-
     /******************************************************
      **********************WORK LOG PAGE********************
      ******************************************************/
     //-Add new Work Log Record
-    $('#wlNewBtn').click(function () {
+    $wlNewBtn.click(function () {
         WORKLOG.addNewWorkLog();
     });
 
     //-Options button for work log record
-    $('#workLog').on('click', '.wloptionsBtn', function () {
+    $workLog.on('click', '.wloptionsBtn', function () {
         var pos = $(this).attr('id');
-        showWLOptionsMenu(pos.charAt(pos.length - 1));
+        WORKLOG.options.show((pos.charAt(pos.length - 1)));
     });
 
     //- Remove worklog item
-    $('#workLog').on('click', '.wlRemoveBtn', function () {
-        if (confirm('Are you sure you want to delete this record?')) {
+    $workLog.on('click', '.wlRemoveBtn', function () {
+        if (confirm(CONFIRM_DELETE)) {
             WORKLOG.removeWorkLog($(this).attr('id'));
-          //  $(this).parent().parent().empty();
         }
     });
-    
-    $('#wlSaveBtn').click(function(){
+
+    $wlSaveBtn.click(function () {
         WORKLOG.saveWorkLog();
     });
-
     /******************************************************
      **********************LOGIN PAGE***********************
      ******************************************************/
-    $('#loginForm #submit').click(function () {
+    $loginForm_submit.click(function () {
         LOGIN.validate(this);
     });
 
-    $('#createNewAccount').click(function () {
-        showSelectedLoginForm(this);
+    $createNewAccount.click(function () {
+        LOGIN.selectLogin(this);
     });
 
-    $('#getAccount').click(function () {
-        showSelectedLoginForm(this);
+    $getAccount.click(function () {
+        LOGIN.selectLogin(this);
     });
 });

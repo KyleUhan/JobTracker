@@ -2,12 +2,7 @@
  * DAO
  */
 
-
-
-JOBTRACKER.display = {
-}
-
-JOBTRACKER.display.dao = {
+JOBTRACKER.dao = {
     //Convert to JSON using built in routing function (url)
     convertToJSON: function (routingName, data) {
         return convertToJSON(routingName, data);
@@ -27,22 +22,6 @@ JOBTRACKER.display.dao = {
 
 };
 
-//Helper functions
-function getTableName(url) {
-    var tblName = "";
-    var urlSections = url.split("/");
-    if (urlSections.length > 1) {
-        for (var i = 0; i < urlSections.length; i++) {
-            if (urlSections[i] === versionNumber) {
-                tblName = urlSections[i + 1];
-            }
-        }
-    }else{
-        tblName = url;
-    }
-    return tblName.toLowerCase();
-}
-
 //ROUTING FOR JSON CONVERSION
 function convertToJSON(url, val) {
     var tableToUpdate = getTableName(url);
@@ -55,7 +34,7 @@ function convertToJSON(url, val) {
             jsonInfo = convertUserToJSON(val);
             break;
         case 'authorities':
-            jsonInfo = convertUserAuthoritesToJSON(val);
+          //  jsonInfo = convertUserAuthoritesToJSON(val);
             break;
         case 'worklogs':
             jsonInfo = convertWorkLogToJSON(val);
@@ -101,18 +80,25 @@ function convertWorkLogToJSON(val) {
         "worklogEnddate": val[1],
         "worklogClient": val[2],
         "worklogUsername": val[3],
-        "worklogHours": val[4]
+        "worklogHours": val[4],
+        "worklogTravel": val[5],
+        "worklogMileage": val[6]
     });
 }
 
-/*function convertUserAuthoritesToJSON(val) {
- var test = {};
- test = JSON.stringify({
- "authority": val[0],
- "authoritiesId": val[1],
- "username": val[2]
- });
- return test;
- }*/
-
-
+//Helper functions
+function getTableName(url) {
+    var tblName = "";
+    var urlSections = url.split("/");
+    if (urlSections.length > 1) {
+        for (var i = 0; i < urlSections.length; i++) {
+            if (urlSections[i] === versionNumber) {
+                tblName = urlSections[i + 1];
+                i = urlSections.length;
+            }
+        }
+    } else {
+        tblName = url;
+    }
+    return tblName.toLowerCase();
+}

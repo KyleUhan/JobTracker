@@ -27,15 +27,16 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "worklog")
 @XmlRootElement
 @NamedQueries({
-@NamedQuery(name = "Worklog.findAll", query = "SELECT w FROM Worklog w"),
+    @NamedQuery(name = "Worklog.findAll", query = "SELECT w FROM Worklog w"),
     @NamedQuery(name = "Worklog.findByWorklogId", query = "SELECT w FROM Worklog w WHERE w.worklogId = :worklogId"),
     @NamedQuery(name = "Worklog.findByWorklogStartdate", query = "SELECT w FROM Worklog w WHERE w.worklogStartdate = :worklogStartdate"),
     @NamedQuery(name = "Worklog.findByWorklogEnddate", query = "SELECT w FROM Worklog w WHERE w.worklogEnddate = :worklogEnddate"),
     @NamedQuery(name = "Worklog.findByWorklogClient", query = "SELECT w FROM Worklog w WHERE w.worklogClient = :worklogClient"),
     @NamedQuery(name = "Worklog.findByWorklogUsername", query = "SELECT w FROM Worklog w WHERE w.worklogUsername = :worklogUsername"),
     @NamedQuery(name = "Worklog.findByWorklogHours", query = "SELECT w FROM Worklog w WHERE w.worklogHours = :worklogHours"),
-    @NamedQuery(name = "Worklog.findByUserName", query = "SELECT w FROM Worklog w WHERE w.worklogUsername = :userName")   
-})
+    @NamedQuery(name = "Worklog.findByUserName", query = "SELECT w FROM Worklog w WHERE w.worklogUsername = :userName"),   
+    @NamedQuery(name = "Worklog.findByWorklogTravel", query = "SELECT w FROM Worklog w WHERE w.worklogTravel = :worklogTravel"),
+    @NamedQuery(name = "Worklog.findByWorklogMileage", query = "SELECT w FROM Worklog w WHERE w.worklogMileage = :worklogMileage")})
 public class Worklog implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -58,6 +59,10 @@ public class Worklog implements Serializable {
     @Size(max = 20)
     @Column(name = "worklog_hours")
     private String worklogHours;
+    @Column(name = "worklog_travel")
+    private Boolean worklogTravel;
+    @Column(name = "worklog_mileage")
+    private Boolean worklogMileage;
 
     public Worklog() {
     }
@@ -112,6 +117,22 @@ public class Worklog implements Serializable {
 
     public void setWorklogHours(String worklogHours) {
         this.worklogHours = worklogHours;
+    }
+
+    public Boolean getWorklogTravel() {
+        return worklogTravel;
+    }
+
+    public void setWorklogTravel(Boolean worklogTravel) {
+        this.worklogTravel = worklogTravel;
+    }
+
+    public Boolean getWorklogMileage() {
+        return worklogMileage;
+    }
+
+    public void setWorklogMileage(Boolean worklogMileage) {
+        this.worklogMileage = worklogMileage;
     }
 
     @Override
