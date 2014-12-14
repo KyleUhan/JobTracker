@@ -1,6 +1,9 @@
 /******************************************************
  **********************LOGIN PAGE***********************
  ******************************************************/
+var $loginInput = $('.loginInput');
+var $loginWrapper = $('#loginWrapper');
+
 var createUserSwitch = true;
 LOGIN = {
     login: function (name) {
@@ -13,7 +16,12 @@ LOGIN = {
         return (localStorage.user !== "undefined") ? true : false;
     },
     clearInputs: function () {
-        $('.loginInput').val("");
+        $loginInput.val("");
+    },
+    validate: function (sender) {
+        if (validateLogin()) {
+            routeLoginForm(sender);
+        }
     }
 };
 
@@ -49,32 +57,30 @@ function checkForUserLogin(data) {
             }
             len++;
         });
-
         var userFound = (len < 1) ? true : false;
         if (userFound) {
             if (storage) {
                 var localpw = $('#PasswordInput').val();
                 var serverPass = data.password;
-                var userName  = data.username;
+                var userName = data.username;
                 $.ajax({
                     type: GET,
                     url: rootURL_users + "/user/" + localpw + "/" + userName,
                     dataType: "html",
                     success: function (data) {
-                        if(data === serverPass){
+                        if (data === serverPass) {
                             localStorage.user = userName;
                             loginUser(localStorage.user);
-                        }else{
+                        } else {
                             alert('password is not correct');
                         }
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
-                        alert('server error - please enter login and password');
+                        alert('server error - please enter login and password' + jqXHR.toString() + " " + textStatus.toString() + " " + errorThrown.toString());
                     }
                 });
                 localStorage.user = userName;
             }
-            
         } else {
             userNotFound();
         }
@@ -181,4 +187,34 @@ function showCreateNewUser(e) {
     $('#passwordWrapper').show();
     $('#confirmPasswordWrapper').show();
     $('#submit').val("Create New User").css('width', '170px');
+}
+
+function validateLogin() {
+    var valid = true;
+    $loginInput.each(function () {
+        if ($(this).is(':visible') && $(this).val() === "") {
+            valid = false;
+            $(this).keyup(function () {
+                $(this).removeClass('loginValidate');
+                switch ($(this).attr('id')) {
+                    case "loginInput":
+                        $(this).attr("placeholder", INPUT_LOGIN);
+                        break;
+                    case "PasswordInput":
+                        $(this).attr("placeholder", INPUT_PASS);
+                        break;
+                    case "PasswordConfirmInput":
+                        $(this).attr("placeholder", INPUT_CONFIRM_PASS);
+                        break;
+                    default:
+                        alert("unknown - loginform submit click -- " + $(this).attr('id'));
+                }
+            });
+            $(this).addClass('loginValidate');
+            $(this).attr("placeholder", 'required');
+        } else {
+            $(this).removeClass('loginValidate');
+        }
+    });
+    return valid;
 }

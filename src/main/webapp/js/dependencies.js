@@ -28,6 +28,9 @@ var GET = 'GET';
 var DELETE = 'DELETE';
 var POST = 'POST';
 var PUT = 'PUT';
+var INPUT_LOGIN = " login@email.com";
+var INPUT_PASS = " password";
+var INPUT_CONFIRM_PASS = " confirm password";
 
 //STORAGE
 var storage = (typeof (Storage) !== "undefined") ? true : false;

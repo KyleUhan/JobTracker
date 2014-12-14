@@ -100,7 +100,8 @@ function convertWorkLogToJSON(val) {
         "worklogStartdate": val[0],
         "worklogEnddate": val[1],
         "worklogClient": val[2],
-        "worklogUsername": val[3]
+        "worklogUsername": val[3],
+        "worklogHours": val[4]
     });
 }
 

@@ -15,17 +15,26 @@ WORKLOG = {
     getWorkEntries: function (userName) {
         REST.method.findAll(rootURL_workLog + "/worklog/" + userName);
     },
+    saveHoursWorked: function () {
+
+    },
     renderWorkLog: function (data) {
         populateWorkLog(data);
     },
     clearWorkLog: function () {
-        $('#workLog #wlEntries tr').empty();
+        clearWorkLog();
     },
     calculateDaysWorked: function (dateA, dateB) {
         return dateDiffInDays(dateA, dateB);
     },
     calculateTotal: function (num1, num2) {
         return num1 * num2;
+    },
+    validateWorkLogSave: function () {
+        validateWorkLogSave()
+    },
+    validate: function(){
+        
     }
 };
 
@@ -34,7 +43,6 @@ WORKLOG.display = {
         return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 };
-
 
 function populateWorkLog(data) {
     WORKLOG.clearWorkLog();
@@ -56,6 +64,7 @@ function populateWorkLog(data) {
                 "<div id='wlOptionButton" + key + "' class='wloptionsBtn' title='options'></div>" +
                 "<div id='wlRemoveButton" + key + "' class='wlRemoveBtn' title='remove'></div>" +
                 "<input type='hidden' id='workLogid" + key + "' value='" + val.worklogId + "'/>" +
+                "<input type='hidden' id='workLogHours" + key + "' value='" + val.worklogHours + "'/>" +
                 "</td>" +
                 "</tr>"
                 );
@@ -107,19 +116,26 @@ function buildClientDropDown(selectedClient) {
     return stringToBuild;
 }
 
-
 function saveWorkLog() {
     if (LOGIN.checkIfUserIsLoggedIn()) {
         var $startDate = $('#wlStartDate' + (displayCounter - 1)).val();
         var $endDate = $('#wlEndDate' + (displayCounter - 1)).val();
         var $client = $('#wlClientOption' + (displayCounter - 1) + " option:selected").text();
-        if ($startDate === "" || $endDate === "" || $client === "") {
+        var $hours = $('#hoursInput').val();
+        var type = findPayType($client);
+        var hoursNeeded = false;
+        if (type === "hour") {
+            if ($hours === "") {
+                hoursNeeded = true;
+            }
+        }
+        if ($startDate === "" || $endDate === "" || $client === "" || hoursNeeded) {
             alert('please enter all information for work log');
         }
         else {
             if (workLogAdded) {
                 workLogAdded = false;
-                var wl = [$startDate, $endDate, $client, localStorage.user];
+                var wl = [$startDate, $endDate, $client, localStorage.user, $hours];
                 REST.method.addRecord(rootURL_workLog, wl);
             } else {
                 alert('no changes have been made');
@@ -135,7 +151,12 @@ function removeWorklog(id) {
         id = id.substring(id.length - 1, id.length);
     }
     id = $('#workLogid' + id).val();
-    REST.method.deleteRecord(rootURL_workLog, id);
+    if(!workLogAdded){
+        REST.method.deleteRecord(rootURL_workLog, id);
+    }else{
+        workLogAdded = false;
+        WORKLOG.clearWorkLog();
+    }
     WORKLOG.getWorkEntries(localStorage.user);
 }
 
@@ -180,6 +201,7 @@ $('#optionsMenu li:nth-child(9)').click(function () {
         $('#optionsMenu li').css('text-align', 'left');
         $('#optionsMenu li').css('padding-left', '20px');
         $('#optionsMenu').css('width', '400px');
+        var timeWorked = 0;;
         var workLogDetails = [];
         workLogDetails[0] = $('#wlClientOption' + clientSelected + ' option:selected').text();
         workLogDetails[1] = $('#wlStartDate' + clientSelected).val();
@@ -189,30 +211,38 @@ $('#optionsMenu li:nth-child(9)').click(function () {
         switch (type) {
             case "day":
                 workLogDetails[3] = WORKLOG.calculateDaysWorked(workLogDetails[2], workLogDetails[1]);
-                 $('#daysDisplay').text('Days: ');
-                 $('#hoursInput').hide();
-                 $('#saveHoursButton').hide();
+                timeWorked = workLogDetails[3];
+                $('#daysDisplay').text('Days: ');
+                $('#hoursInput').hide();
+                $("#optionMenuInnerDetails #WLDetailsTimeWorkedAmount").show();
                 break;
             case "hour":
-                workLogDetails[3] = "";
-                 $('#daysDisplay').text('Hours: ');
-                 $('#hoursInput').show();
-                 $('#saveHoursButton').show();
-                 $('#hoursInput').keyup(function(){
-                     $("#optionMenuInnerDetails #WLDetailsTotalAmount").text($(this).val()*payRate);
-                 });
+                $('#daysDisplay').text('Hours: ');
+                $('#hoursInput').show();
+                var $hrs = $('#workLogHours' + clientSelected).val();
+                $('#hoursInput').val($hrs);
+                $("#optionMenuInnerDetails #WLDetailsTotalAmount").text();
+                $('#hoursInput').keyup(function () {
+                    $("#optionMenuInnerDetails #WLDetailsTotalAmount").text($(this).val() * payRate);
+                });
+                $("#optionMenuInnerDetails #WLDetailsTimeWorkedAmount").hide();
+                if(isNaN($hrs) || $hrs === null){
+                    $hrs = 0;
+                }
+                workLogDetails[3] = $hrs;
+                timeWorked = workLogDetails[3];
                 break;
             case "flat":
                 workLogDetails[3] = WORKLOG.calculateDaysWorked(workLogDetails[2], workLogDetails[1]);
-                 $('#daysDisplay').text('Days: ');
-                 $('#hoursInput').hide();
-                 $('##saveHoursButton').hide();
+                timeWorked = 1;
+                $('#daysDisplay').text('Days: ');
+                $('#hoursInput').hide();
+                $("#optionMenuInnerDetails #WLDetailsTimeWorkedAmount").show();
                 break;
         }
-       
         
         workLogDetails[4] = WORKLOG.display.formatCurrency(payRate);
-        workLogDetails[5] = WORKLOG.display.formatCurrency(WORKLOG.calculateTotal(workLogDetails[3], payRate));
+        workLogDetails[5] = WORKLOG.display.formatCurrency(WORKLOG.calculateTotal(timeWorked, payRate));
         buildOptionsDetail(workLogDetails);
         showOptionDetails();
         sideMenuExpandDetails = false;
@@ -240,7 +270,7 @@ function findPayType(clientName) {
     $.each(CLIENTS.returnClientList(), function (key, val) {
         if (clientName === val.clientName) {
             if (val.clientPerDay) {
-                payType = "day";      
+                payType = "day";
             }
             if (val.clientPerHour) {
                 payType = "hour";
@@ -258,7 +288,7 @@ function dateDiffInDays(dateA, dateB) {
     var d1 = new Date(dateA);
     var d2 = new Date(dateB);
     var diff = d2 - d1;
-    return (Math.abs(diff) / (24 * 60 * 60 * 1000))
+    return (Math.abs(diff) / (24 * 60 * 60 * 1000));
 }
 
 function buildOptionsDetail(itemArray) {
@@ -291,4 +321,9 @@ function hidePayRateInputs() {
 function hidePayTravelInput() {
     $('#paysTravelInputWrap span').hide();
     $('#addClientFormPaysTravelInput').hide();
+}
+
+function clearWorkLog() {
+    $('#workLog #wlEntries tr').empty();
+    $('#hoursInput').val("");
 }

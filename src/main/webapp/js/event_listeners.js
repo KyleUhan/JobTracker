@@ -94,7 +94,7 @@ $(function () {
      **********************LOGIN PAGE***********************
      ******************************************************/
     $('#loginForm #submit').click(function () {
-        routeLoginForm(this);
+        LOGIN.validate(this);
     });
 
     $('#createNewAccount').click(function () {

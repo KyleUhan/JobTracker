@@ -27,13 +27,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "worklog")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Worklog.findAll", query = "SELECT w FROM Worklog w"),
+@NamedQuery(name = "Worklog.findAll", query = "SELECT w FROM Worklog w"),
     @NamedQuery(name = "Worklog.findByWorklogId", query = "SELECT w FROM Worklog w WHERE w.worklogId = :worklogId"),
     @NamedQuery(name = "Worklog.findByWorklogStartdate", query = "SELECT w FROM Worklog w WHERE w.worklogStartdate = :worklogStartdate"),
     @NamedQuery(name = "Worklog.findByWorklogEnddate", query = "SELECT w FROM Worklog w WHERE w.worklogEnddate = :worklogEnddate"),
     @NamedQuery(name = "Worklog.findByWorklogClient", query = "SELECT w FROM Worklog w WHERE w.worklogClient = :worklogClient"),
     @NamedQuery(name = "Worklog.findByWorklogUsername", query = "SELECT w FROM Worklog w WHERE w.worklogUsername = :worklogUsername"),
-    @NamedQuery(name = "Worklog.findByUserName", query = "SELECT w FROM Worklog w WHERE w.worklogUsername = :userName")
+    @NamedQuery(name = "Worklog.findByWorklogHours", query = "SELECT w FROM Worklog w WHERE w.worklogHours = :worklogHours"),
+    @NamedQuery(name = "Worklog.findByUserName", query = "SELECT w FROM Worklog w WHERE w.worklogUsername = :userName")   
 })
 public class Worklog implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -54,6 +55,9 @@ public class Worklog implements Serializable {
     @Size(max = 255)
     @Column(name = "worklog_username")
     private String worklogUsername;
+    @Size(max = 20)
+    @Column(name = "worklog_hours")
+    private String worklogHours;
 
     public Worklog() {
     }
@@ -100,6 +104,14 @@ public class Worklog implements Serializable {
 
     public void setWorklogUsername(String worklogUsername) {
         this.worklogUsername = worklogUsername;
+    }
+
+    public String getWorklogHours() {
+        return worklogHours;
+    }
+
+    public void setWorklogHours(String worklogHours) {
+        this.worklogHours = worklogHours;
     }
 
     @Override

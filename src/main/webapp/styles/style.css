@@ -365,7 +365,7 @@ header nav{
     width: 50px;
 }
 
-#saveHoursButton{
+/*#saveHoursButton{
     height: 15px;
     width: 40px;
     margin-left: 5px;
@@ -390,7 +390,7 @@ header nav{
 #saveHoursButton:hover{
     color: white;
     background: black;
-}
+}*/
 
 /**ClientList**/
 #clientList{
@@ -605,12 +605,17 @@ header nav{
     height: 80%;
     padding-left: 10px;
     border-radius: 2px;
+    transition: all .1s;
 }
 
 .loginAnchor{
     font-size: 12px;
     color: blue;
     cursor: pointer;
+}
+
+.loginValidate{
+    background: rgba(255,0,0,.4);
 }
 
 /****FOOTER****/

@@ -125,6 +125,7 @@ function success(type, url, data) {
                 alert('Work log deleted');
                 break;
             case POST:
+                WORKLOG.getWorkEntries(localStorage.user);
                 alert('Work log has been added');
                 break;
             case PUT:

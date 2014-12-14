@@ -27,6 +27,9 @@ CLIENTS = {
     },
     buildClientList:function(data){
         renderClientList(data);
+    },
+    validate: function(){
+        
     }
 };
 

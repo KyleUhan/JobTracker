@@ -25,6 +25,7 @@ function showForm(e) {
     if (e === 0) {
         WORKLOG.clearWorkLog();
         if (LOGIN.checkIfUserIsLoggedIn()) {
+            workLogAdded = false;
             WORKLOG.getWorkEntries(localStorage.user);
         }
     } else if (e === 1) {
