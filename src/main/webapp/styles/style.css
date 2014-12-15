@@ -371,33 +371,6 @@ header nav{
     width: 50px;
 }
 
-/*#saveHoursButton{
-    height: 15px;
-    width: 40px;
-    margin-left: 5px;
-    padding-right: 3px;
-    padding-left: 3px;
-    cursor: pointer;
-    background: rgb(213,322,217);
-    color: black;
-    border: 1px solid black;
-    text-align: center;
-    font-size: 14px;
-    transition: all .1s;
-}
-
-#saveHoursButton:active{
-    border: 1px solid rgb(213,322,217);
-    -moz-box-shadow:0 0 2px 4px rgb(0,0,0);
-    -webkit-box-shadow: 0 0 2px 4px rgb(0,0,0);
-    box-shadow: 0 0 2px 4px rgb(0,0,0);
-}
-
-#saveHoursButton:hover{
-    color: white;
-    background: black;
-}*/
-
 /**ClientList**/
 #clientList{
     width: 96%;
@@ -450,7 +423,7 @@ header nav{
     padding-top: 10px;
     padding-bottom: 10px;
     margin-right: 5px;
-    margin-left: 2%;;
+    margin-left: 2%;
     float:left;
 }
 
@@ -462,6 +435,8 @@ header nav{
 
 }
 
+
+
 #selectedClient{
     clear: left;
     height: 30px;
@@ -469,28 +444,56 @@ header nav{
 
 #selectedClient input{
     display: inline-block;
-    width:20%;
     height: 100%;
     text-align: center;
 }
 
+.clientSelectedWrap{
+    width: 12%;
+    background: rgba(213,322,217,.5);
+    -moz-box-shadow:0 0 10px 2px rgb(153,178,183) inset;
+    -webkit-box-shadow: 0 0 10px 2px rgb(153,178,183) inset;
+    box-shadow: 0 0 10px 2px rgb(153,178,183) inset;
+}
+
 /*Id*/
-#selectedClient input:nth-child(1){
+#selectedClient .clientSelectedWrap:nth-child(1){
+}
+
+/*Client Name*/
+#selectedClient .clientSelectedWrap:nth-child(2){
     margin-left: 2%;
-    width:5%;
 }
 
 /*Pay Rate*/
-#selectedClient input:nth-child(3){
-    width:12%;
+#selectedClient .clientSelectedWrap:nth-child(3){
+
 }
 
 /*Pay type*/
-#clientPayType{
+#selectedClient .clientSelectedWrap:nth-child(4){
     outline: none;
     text-align: center;
-    width:15%;
     height:115%;
+}
+
+/*Contact Name*/
+#selectedClient .clientSelectedWrap:nth-child(5){
+
+}
+
+/*Contact Number*/
+#selectedClient .clientSelectedWrap:nth-child(6){
+
+}
+
+/*Contact Email*/
+#selectedClient .clientSelectedWrap:nth-child(7){
+
+}
+
+#clientPayType{
+
 }
 
 .jobTrackerRemoveButton, .jobTrackerUpdateButton{

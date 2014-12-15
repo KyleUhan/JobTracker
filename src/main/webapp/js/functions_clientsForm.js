@@ -137,11 +137,11 @@ function updateClient() {
                 $.each(CLIENTS.returnClientList(), function (key, val) {
                     if (parseInt(id) === parseInt(val.idClientProfile)) {
                         clientInfo[0] = id;
-                        clientInfo[1] = $clientName.val();
-                        clientInfo[2] = val.clientContactName;
-                        clientInfo[3] = val.clientContactNumber;
-                        clientInfo[4] = val.clientContactEmail;
-                        clientInfo[5] = $('#clientPay').val();
+                        clientInfo[1] = ($clientName.val() !== "") ? $clientName.val() : val.clientName;
+                        clientInfo[2] = ($clientContactName.val() !== "" && $clientContactName.val().trim() !== "-------")?$clientContactName.val():val.clientContactName;
+                        clientInfo[3] = ($clientContactPhone.val() !== "" && $clientContactPhone.val().trim() !== "-------")?$clientContactPhone.val():val.clientContactNumber;
+                        clientInfo[4] = ($clientContactEmail.val() !== "" && $clientContactEmail.val().trim() !== "-------")?$clientContactEmail.val():val.clientContactEmail;
+                        clientInfo[5] = ($clientPay.val() !== "") ? $clientPay.val() : val.clientRate;
                         var payType = $('#clientPayType option:selected').val();
                         var pt = [0, 0, 0];
                         switch (payType) {
@@ -186,11 +186,9 @@ function renderClientList(data) {
 //Adds the fields from client profile list to the selected input boxes
 function populateSelected(val) {
     addToSelectedAnimation();
-    $('#selectedClient input:nth-child(' + 1 + ')').val(val[0]);
-    $('#selectedClient input:nth-child(' + 2 + ')').val(val[1]);
-    $('#selectedClient input:nth-child(' + 3 + ')').val(val[2]);
-    //$('#selectedClient input:nth-child(' + 4 + ')').html(val[3]);
-    $('#clientPayType').html(val[3]);
+    for (var i = 0; i < 7; i++) {
+        (i === 3) ? $('#selectedClient .clientSelectedWrap:nth-child(' + (i + 1) + ')').html(val[i]) : $('#selectedClient .clientSelectedWrap:nth-child(' + (i + 1) + ')').val(val[i]);
+    }
 }
 
 //Select an item from client list
@@ -229,6 +227,9 @@ function clickList() {
                     optionOrder = [optionOrder[2], optionOrder[0], optionOrder[1]];
                     clientSelectedInfo[3] = optionOrder.toString().replace(",", "");
                 }
+                clientSelectedInfo[4] = (val.clientContactName === "" || val.clientContactName === "undefined") ? " ------- " : val.clientContactName;
+                clientSelectedInfo[5] = (val.clientContactNumber === "" || val.clientContactNumber === "undefined") ? " ------- " : val.clientContactNumber;
+                clientSelectedInfo[6] = (val.clientContactEmail === "" || val.clientContactEmail === "undefined") ? " ------- " : val.clientContactEmail;
                 populateSelected(clientSelectedInfo);
                 return false;
             }
@@ -254,12 +255,12 @@ function showAddNewClientForm() {
 //adds a little bounce when client is added to selected client area
 
 function addToSelectedAnimation() {
-    $selectedClient_input.animate({
+    $('.clientSelectedWrapAnimate').animate({
         height: '20px'
-    }, 200, function () {
-        $selectedClient_input.animate({
+    }, 150, function () {
+        $('.clientSelectedWrapAnimate').animate({
             height: '30px'
-        }, 150);
+        }, 100);
     });
 }
 
@@ -280,8 +281,6 @@ function hidePayRateInputs() {
 function showPayRateSelected(e) {
     $(e).parent().parent().children().children().show('fast');
 }
-
-
 
 function hidePayMileageInput() {
     $mileageInputWrap_span.hide();

@@ -2,9 +2,6 @@
  **********************LOGIN PAGE**********************
  ******************************************************
  *******************Handles Login form*****************/
-
-
-
 var createUserSwitch = true;
 LOGIN = {
     login: function (name) {

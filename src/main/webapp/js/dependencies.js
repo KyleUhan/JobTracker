@@ -69,7 +69,11 @@ var $addClientFormPaysMileageInput = $('#addClientFormPaysMileageInput'),
         $addClientFormContactNumber = $('#addClientFormContactNumber'),
         $addClientFormContactEmail = $('#addClientFormContactEmail'),
         $addClientFormInput = $('.addClientFormInput'),
-        $addClientForm = $('#addClientForm');
+        $addClientForm = $('#addClientForm'),
+        $clientPay = $('#clientPay'),
+        $clientContactName = $('#clientContactName'),
+        $clientContactPhone = $('#clientContactPhone'),
+        $clientContactEmail = $('#clientContactEmail');
 var $clientFormPayRateInput = $('.clientFormPayRateInput'),
         $clientList = $('#clientList'),
         $clientName = $('#clientName'),
@@ -112,3 +116,9 @@ var $wlNewBtn = $('#wlNewBtn'),
         $wlSaveBtn = $('#wlSaveBtn');
 var $loginForm_submit = $('#loginForm #submit'),
         $getAccount = $('#getAccount');
+
+
+
+
+
+
