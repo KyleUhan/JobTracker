@@ -138,6 +138,10 @@ header nav{
     box-shadow: 0 0 10px 5px #888888 inset;
 }
 
+#workLogForm{
+    overflow-y: auto;
+}
+
 #workLog th, #workLog td {
     border: 1px solid black;
     border-collapse: collapse;
@@ -482,8 +486,11 @@ header nav{
 }
 
 /*Pay type*/
-#selectedClient input:nth-child(4){
-    width:18%;
+#clientPayType{
+    outline: none;
+    text-align: center;
+    width:15%;
+    height:115%;
 }
 
 .jobTrackerRemoveButton, .jobTrackerUpdateButton{

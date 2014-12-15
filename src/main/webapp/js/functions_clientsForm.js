@@ -141,10 +141,23 @@ function updateClient() {
                         clientInfo[2] = val.clientContactName;
                         clientInfo[3] = val.clientContactNumber;
                         clientInfo[4] = val.clientContactEmail;
-                        clientInfo[5] = val.clientRate;
-                        clientInfo[6] = val.clientPerDay;
-                        clientInfo[7] = val.clientPerHour;
-                        clientInfo[8] = val.clientSetRate;
+                        clientInfo[5] = $('#clientPay').val();
+                        var payType = $('#clientPayType option:selected').val();
+                        var pt = [0, 0, 0];
+                        switch (payType) {
+                            case "Per Day":
+                                pt[0] = 1;
+                                break;
+                            case "Per Hour":
+                                pt[1] = 1;
+                                break;
+                            case "Flat Rate":
+                                pt[2] = 1;
+                                break;
+                        }
+                        clientInfo[6] = pt[0];
+                        clientInfo[7] = pt[1];
+                        clientInfo[8] = pt[2];
                         clientInfo[9] = val.clientTravelRate;
                         clientInfo[10] = val.clientMileageRate;
                         clientInfo[11] = localStorage.user;
@@ -176,7 +189,8 @@ function populateSelected(val) {
     $('#selectedClient input:nth-child(' + 1 + ')').val(val[0]);
     $('#selectedClient input:nth-child(' + 2 + ')').val(val[1]);
     $('#selectedClient input:nth-child(' + 3 + ')').val(val[2]);
-    $('#selectedClient input:nth-child(' + 4 + ')').val(val[3]);
+    //$('#selectedClient input:nth-child(' + 4 + ')').html(val[3]);
+    $('#clientPayType').html(val[3]);
 }
 
 //Select an item from client list
@@ -198,14 +212,22 @@ function clickList() {
                 clientSelectedInfo[0] = val.idClientProfile;
                 clientSelectedInfo[1] = val.clientName;
                 clientSelectedInfo[2] = val.clientRate;
+                var optionOrder = [
+                    "<option value='Per Day'>Per Day</option>",
+                    "<option value='Per Hour'>Per Hour</option>",
+                    "<option value='Flat Rate'>Flat Rate</option>"
+                ];
+                clientSelectedInfo[3] = optionOrder.toString().replace(",", "");
                 if (val.clientPerDay) {
-                    clientSelectedInfo[3] = "Per Day";
+                    clientSelectedInfo[3] = optionOrder.toString().replace(",", "");
                 }
                 if (val.clientPerHour) {
-                    clientSelectedInfo[3] = "Per Hour";
+                    optionOrder = [optionOrder[1], optionOrder[2], optionOrder[0]];
+                    clientSelectedInfo[3] = optionOrder.toString().replace(",", "");
                 }
                 if (val.clientSetRate) {
-                    clientSelectedInfo[3] = "Flat Rate";
+                    optionOrder = [optionOrder[2], optionOrder[0], optionOrder[1]];
+                    clientSelectedInfo[3] = optionOrder.toString().replace(",", "");
                 }
                 populateSelected(clientSelectedInfo);
                 return false;
@@ -244,6 +266,7 @@ function addToSelectedAnimation() {
 //Removes the selected client values from the boxes
 function clearInput() {
     $selectedClient_input.val('');
+    $('#clientPayType').empty();
 }
 
 function clearOtherRateValues() {
